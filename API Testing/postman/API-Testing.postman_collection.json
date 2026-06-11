@@ -1,0 +1,849 @@
+{
+  "info": {
+    "name": "API Testing Backend",
+    "description": "Full pre-request validation + post-response assertions.\n\nEnvironment variables: Url_env, API_KEY, password, userEmail\n\nRun order: Create user → Create Orders → other requests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "Url_env", "value": "http://localhost:3000" },
+    { "key": "API_KEY", "value": "your-api-key-here" },
+    { "key": "password", "value": "Darshan@123" },
+    { "key": "accessToken", "value": "" },
+    { "key": "refreshToken", "value": "" },
+    { "key": "userId", "value": "" },
+    { "key": "orderId", "value": "" },
+    { "key": "registerEmail", "value": "" },
+    { "key": "registerName", "value": "" },
+    { "key": "userEmail", "value": "darshan@example.com" },
+    { "key": "orderCustomerName", "value": "Darshan" },
+    { "key": "orderCustomerEmail", "value": "" }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// ========== COLLECTION PRE-REQUEST (every request) ==========",
+          "",
+          "const getVar = (key) => pm.environment.get(key) || pm.collectionVariables.get(key);",
+          "",
+          "// Validate base URL",
+          "const baseUrl = getVar('Url_env');",
+          "pm.test('[Pre] Url_env is set', () => {",
+          "    pm.expect(baseUrl, 'Set Url_env in environment').to.be.a('string').and.not.empty;",
+          "});",
+          "",
+          "// Auto-attach API key",
+          "const apiKey = getVar('API_KEY');",
+          "if (apiKey) {",
+          "    pm.request.headers.upsert({ key: 'x-api-key', value: apiKey });",
+          "} else {",
+          "    console.warn('[Pre] Missing API_KEY');",
+          "}",
+          "",
+          "// Auto-attach JWT for protected routes",
+          "const publicPaths = ['/api/register', '/api/login', '/api/auth/refresh'];",
+          "const requestUrl = pm.request.url.toString();",
+          "const isPublic = publicPaths.some((p) => requestUrl.includes(p));",
+          "",
+          "if (!isPublic) {",
+          "    const token = getVar('accessToken');",
+          "    if (token) {",
+          "        pm.request.headers.upsert({ key: 'Authorization', value: `Bearer ${token}` });",
+          "    } else {",
+          "        console.warn('[Pre] No accessToken — run Create user or Login first');",
+          "    }",
+          "}",
+          "",
+          "// Ensure Content-Type for JSON bodies",
+          "if (pm.request.body && pm.request.body.mode === 'raw' && pm.request.body.raw) {",
+          "    pm.request.headers.upsert({ key: 'Content-Type', value: 'application/json' });",
+          "}"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// ========== COLLECTION TESTS (every request) ==========",
+          "",
+          "pm.test('[Global] Response time under 3s', () => {",
+          "    pm.expect(pm.response.responseTime).to.be.below(3000);",
+          "});",
+          "",
+          "pm.test('[Global] Response has valid JSON body', () => {",
+          "  if (pm.response.text && pm.response.text.length > 0) {",
+          "    pm.response.to.be.json;",
+          "  }",
+          "});",
+          "",
+          "pm.test('[Global] Content-Type is application/json', () => {",
+          "  if (pm.response.text && pm.response.text.length > 0 && pm.response.code !== 204) {",
+          "    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+          "  }",
+          "});"
+        ]
+      }
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Create user",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// ========== PRE: Register ==========",
+                  "const ts = Date.now();",
+                  "const email = `darshan+${ts}@example.com`;",
+                  "const name = `Darshan${ts}`;",
+                  "const password = pm.environment.get('password') || pm.collectionVariables.get('password');",
+                  "",
+                  "pm.collectionVariables.set('registerEmail', email);",
+                  "pm.collectionVariables.set('registerName', name);",
+                  "",
+                  "pm.test('[Pre] password is at least 8 chars', () => {",
+                  "    pm.expect(password, 'Set password variable').to.have.lengthOf.at.least(8);",
+                  "});",
+                  "",
+                  "pm.test('[Pre] generated email is valid', () => {",
+                  "    pm.expect(email).to.match(/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/);",
+                  "});",
+                  "",
+                  "console.log('[Pre] Register:', email);"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// ========== POST: Register assertions ==========",
+                  "",
+                  "pm.test('Status code is 201 Created', () => {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "const res = pm.response.json();",
+                  "",
+                  "pm.test('Response has user object', () => {",
+                  "    pm.expect(res).to.have.property('user');",
+                  "    pm.expect(res.user).to.have.keys('id', 'name', 'email', 'createdAt', 'updatedAt');",
+                  "});",
+                  "",
+                  "pm.test('User email matches request', () => {",
+                  "    const expected = pm.collectionVariables.get('registerEmail');",
+                  "    pm.expect(res.user.email).to.eql(expected);",
+                  "});",
+                  "",
+                  "pm.test('User has no password in response', () => {",
+                  "    pm.expect(res.user).to.not.have.property('password');",
+                  "    pm.expect(res.user).to.not.have.property('passwordHash');",
+                  "});",
+                  "",
+                  "pm.test('JWT tokens are returned', () => {",
+                  "    pm.expect(res.accessToken).to.be.a('string').and.not.empty;",
+                  "    pm.expect(res.refreshToken).to.be.a('string').and.not.empty;",
+                  "    pm.expect(res.tokenType).to.eql('Bearer');",
+                  "    pm.expect(res.expiresIn).to.eql('1h');",
+                  "});",
+                  "",
+                  "pm.test('Success message is present', () => {",
+                  "    pm.expect(res.message).to.eql('registered successfully');",
+                  "});",
+                  "",
+                  "// Save for chained requests",
+                  "if (pm.response.code === 201) {",
+                  "    pm.collectionVariables.set('accessToken', res.accessToken);",
+                  "    pm.collectionVariables.set('refreshToken', res.refreshToken);",
+                  "    pm.collectionVariables.set('userId', res.user.id);",
+                  "    pm.collectionVariables.set('userEmail', res.user.email);",
+                  "    pm.environment.set('accessToken', res.accessToken);",
+                  "    pm.environment.set('userId', res.user.id);",
+                  "    pm.environment.set('userEmail', res.user.email);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"{{registerName}}\",\n  \"email\": \"{{registerEmail}}\",\n  \"password\": \"{{password}}\"\n}"
+            },
+            "url": "{{Url_env}}/api/register"
+          }
+        },
+        {
+          "name": "Login User",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// ========== PRE: Login ==========",
+                  "const getVar = (k) => pm.environment.get(k) || pm.collectionVariables.get(k);",
+                  "const email = getVar('userEmail');",
+                  "const password = getVar('password');",
+                  "",
+                  "pm.test('[Pre] userEmail is set', () => {",
+                  "    pm.expect(email, 'Set userEmail or run Create user first').to.be.a('string').and.not.empty;",
+                  "});",
+                  "",
+                  "pm.test('[Pre] password is set', () => {",
+                  "    pm.expect(password, 'Set password variable').to.be.a('string').and.not.empty;",
+                  "});",
+                  "",
+                  "pm.test('[Pre] email format is valid', () => {",
+                  "    pm.expect(email).to.match(/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// ========== POST: Login assertions ==========",
+                  "",
+                  "pm.test('Status code is 200 OK', () => {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const res = pm.response.json();",
+                  "",
+                  "pm.test('Response has user and tokens', () => {",
+                  "    pm.expect(res.user).to.have.property('id');",
+                  "    pm.expect(res.user).to.have.property('email');",
+                  "    pm.expect(res.accessToken).to.be.a('string').and.not.empty;",
+                  "    pm.expect(res.refreshToken).to.be.a('string').and.not.empty;",
+                  "});",
+                  "",
+                  "pm.test('Login success message', () => {",
+                  "    pm.expect(res.message).to.eql('logged in successfully');",
+                  "});",
+                  "",
+                  "if (pm.response.code === 200) {",
+                  "    pm.collectionVariables.set('accessToken', res.accessToken);",
+                  "    pm.collectionVariables.set('refreshToken', res.refreshToken);",
+                  "    pm.collectionVariables.set('userId', res.user.id);",
+                  "    pm.collectionVariables.set('userEmail', res.user.email);",
+                  "    pm.environment.set('accessToken', res.accessToken);",
+                  "    pm.environment.set('refreshToken', res.refreshToken);",
+                  "    pm.environment.set('userId', res.user.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{userEmail}}\",\n  \"password\": \"{{password}}\"\n}"
+            },
+            "url": "{{Url_env}}/api/login"
+          }
+        },
+        {
+          "name": "Refresh Token",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "const refreshToken = pm.environment.get('refreshToken') || pm.collectionVariables.get('refreshToken');",
+                  "pm.test('[Pre] refreshToken exists', () => {",
+                  "    pm.expect(refreshToken, 'Run Login or Register first').to.be.a('string').and.not.empty;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200 OK', () => pm.response.to.have.status(200));",
+                  "",
+                  "const res = pm.response.json();",
+                  "",
+                  "pm.test('New tokens issued', () => {",
+                  "    pm.expect(res.accessToken).to.be.a('string').and.not.empty;",
+                  "    pm.expect(res.refreshToken).to.be.a('string').and.not.empty;",
+                  "    pm.expect(res.message).to.eql('token refreshed');",
+                  "});",
+                  "",
+                  "if (pm.response.code === 200) {",
+                  "    pm.collectionVariables.set('accessToken', res.accessToken);",
+                  "    pm.collectionVariables.set('refreshToken', res.refreshToken);",
+                  "    pm.environment.set('accessToken', res.accessToken);",
+                  "    pm.environment.set('refreshToken', res.refreshToken);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}"
+            },
+            "url": "{{Url_env}}/api/auth/refresh"
+          }
+        },
+        {
+          "name": "Get current user (me)",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "const token = pm.environment.get('accessToken') || pm.collectionVariables.get('accessToken');",
+                  "pm.test('[Pre] accessToken exists', () => {",
+                  "    pm.expect(token, 'Login or Register first').to.be.a('string').and.not.empty;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200 OK', () => pm.response.to.have.status(200));",
+                  "",
+                  "const res = pm.response.json();",
+                  "",
+                  "pm.test('Returns current user profile', () => {",
+                  "    pm.expect(res.user).to.have.keys('id', 'name', 'email', 'createdAt', 'updatedAt');",
+                  "    pm.expect(res.user.id).to.eql(pm.collectionVariables.get('userId'));",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{Url_env}}/api/me"
+          }
+        },
+        {
+          "name": "Logout",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200 OK', () => pm.response.to.have.status(200));",
+                  "pm.test('Logout message', () => {",
+                  "    pm.expect(pm.response.json().message).to.eql('logged out successfully');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}"
+            },
+            "url": "{{Url_env}}/api/logout"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Get user details",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "const userId = pm.environment.get('userId') || pm.collectionVariables.get('userId');",
+                  "pm.test('[Pre] userId is set', () => {",
+                  "    pm.expect(userId, 'Run Create user or Login first').to.be.a('string').and.not.empty;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200 OK', () => pm.response.to.have.status(200));",
+                  "",
+                  "const res = pm.response.json();",
+                  "",
+                  "pm.test('User object structure is valid', () => {",
+                  "    pm.expect(res.user).to.have.property('id');",
+                  "    pm.expect(res.user.id).to.eql(pm.collectionVariables.get('userId'));",
+                  "    pm.expect(res.user).to.have.property('name');",
+                  "    pm.expect(res.user).to.have.property('email');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{Url_env}}/api/users/{{userId}}"
+          }
+        },
+        {
+          "name": "Update user details",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "const userId = pm.environment.get('userId') || pm.collectionVariables.get('userId');",
+                  "pm.test('[Pre] userId is set', () => {",
+                  "    pm.expect(userId).to.be.a('string').and.not.empty;",
+                  "});",
+                  "pm.collectionVariables.set('updatedUserName', `Darshan Updated ${Date.now()}`);"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200 OK', () => pm.response.to.have.status(200));",
+                  "",
+                  "const res = pm.response.json();",
+                  "const expectedName = pm.collectionVariables.get('updatedUserName');",
+                  "",
+                  "pm.test('User name was updated', () => {",
+                  "    pm.expect(res.user.name).to.eql(expectedName);",
+                  "});",
+                  "",
+                  "pm.test('updatedAt changed', () => {",
+                  "    pm.expect(res.user.updatedAt).to.be.a('string');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"{{updatedUserName}}\"\n}"
+            },
+            "url": "{{Url_env}}/api/users/{{userId}}"
+          }
+        },
+        {
+          "name": "Delete user",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "const userId = pm.environment.get('userId') || pm.collectionVariables.get('userId');",
+                  "pm.test('[Pre] userId is set', () => {",
+                  "    pm.expect(userId, 'Set userId before delete').to.be.a('string').and.not.empty;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200 OK', () => pm.response.to.have.status(200));",
+                  "",
+                  "pm.test('Delete success message', () => {",
+                  "    pm.expect(pm.response.json().message).to.eql('delete user successfully');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "url": "{{Url_env}}/api/users/{{userId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "item": [
+        {
+          "name": "Create Orders",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// ========== PRE: Create Order ==========",
+                  "const getVar = (k) => pm.environment.get(k) || pm.collectionVariables.get(k);",
+                  "const userId = getVar('userId');",
+                  "const email = getVar('userEmail') || 'darshan@example.com';",
+                  "",
+                  "pm.collectionVariables.set('orderCustomerName', 'Darshan');",
+                  "pm.collectionVariables.set('orderCustomerEmail', email);",
+                  "",
+                  "pm.test('[Pre] accessToken exists', () => {",
+                  "    pm.expect(getVar('accessToken'), 'Login or Register first').to.be.a('string').and.not.empty;",
+                  "});",
+                  "",
+                  "pm.test('[Pre] userId is set', () => {",
+                  "    pm.expect(userId, 'userId required for order').to.be.a('string').and.not.empty;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// ========== POST: Create Order assertions ==========",
+                  "",
+                  "pm.test('Status code is 201 Created', () => pm.response.to.have.status(201));",
+                  "",
+                  "const res = pm.response.json();",
+                  "",
+                  "pm.test('Order created success message', () => {",
+                  "    pm.expect(res.message).to.eql('order created successfully');",
+                  "    pm.expect(res.defaultStatus).to.eql('pending');",
+                  "});",
+                  "",
+                  "pm.test('Order has pending status by default', () => {",
+                  "    pm.expect(res.order.status).to.eql('pending');",
+                  "});",
+                  "",
+                  "pm.test('Order structure is valid', () => {",
+                  "    pm.expect(res.order).to.have.keys(",
+                  "        'id', 'userId', 'customerName', 'customerEmail',",
+                  "        'items', 'status', 'total', 'shippingAddress',",
+                  "        'notes', 'createdAt', 'updatedAt'",
+                  "    );",
+                  "});",
+                  "",
+                  "pm.test('Order items and total are correct', () => {",
+                  "    pm.expect(res.order.items).to.be.an('array').that.is.not.empty;",
+                  "    pm.expect(res.order.total).to.be.a('number');",
+                  "    pm.expect(res.order.total).to.eql(39.98);",
+                  "});",
+                  "",
+                  "pm.test('Order linked to userId', () => {",
+                  "    pm.expect(res.order.userId).to.eql(pm.collectionVariables.get('userId'));",
+                  "});",
+                  "",
+                  "if (pm.response.code === 201) {",
+                  "    pm.collectionVariables.set('orderId', res.order.id);",
+                  "    pm.environment.set('orderId', res.order.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"{{userId}}\",\n  \"customerName\": \"{{orderCustomerName}}\",\n  \"customerEmail\": \"{{orderCustomerEmail}}\",\n  \"items\": [\n    { \"name\": \"Widget\", \"quantity\": 2, \"price\": 19.99 }\n  ],\n  \"shippingAddress\": {\n    \"street\": \"123 Main St\",\n    \"city\": \"Mumbai\",\n    \"state\": \"MH\",\n    \"zip\": \"400001\",\n    \"country\": \"IN\"\n  },\n  \"notes\": \"Leave at door\"\n}"
+            },
+            "url": "{{Url_env}}/api/orders"
+          }
+        },
+        {
+          "name": "List Of Orders",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200 OK', () => pm.response.to.have.status(200));",
+                  "",
+                  "const res = pm.response.json();",
+                  "",
+                  "pm.test('Paginated orders response', () => {",
+                  "    pm.expect(res).to.have.keys('orders', 'page', 'limit', 'total');",
+                  "    pm.expect(res.orders).to.be.an('array');",
+                  "    pm.expect(res.page).to.be.a('number');",
+                  "    pm.expect(res.limit).to.be.a('number');",
+                  "    pm.expect(res.total).to.be.a('number');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{Url_env}}/api/orders?page=1&limit=20",
+              "host": ["{{Url_env}}"],
+              "path": ["api", "orders"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" },
+                { "key": "status", "value": "pending", "disabled": true }
+              ]
+            }
+          }
+        },
+        {
+          "name": "List Orders For a User",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "const userId = pm.environment.get('userId') || pm.collectionVariables.get('userId');",
+                  "pm.test('[Pre] userId is set', () => {",
+                  "    pm.expect(userId).to.be.a('string').and.not.empty;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200 OK', () => pm.response.to.have.status(200));",
+                  "",
+                  "const res = pm.response.json();",
+                  "",
+                  "pm.test('User orders list structure', () => {",
+                  "    pm.expect(res.orders).to.be.an('array');",
+                  "    pm.expect(res).to.have.property('total');",
+                  "});",
+                  "",
+                  "pm.test('All orders belong to userId', () => {",
+                  "    const userId = pm.collectionVariables.get('userId');",
+                  "    res.orders.forEach((order) => {",
+                  "        pm.expect(order.userId).to.eql(userId);",
+                  "    });",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{Url_env}}/api/users/{{userId}}/orders"
+          }
+        },
+        {
+          "name": "GetOrderById",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "const orderId = pm.environment.get('orderId') || pm.collectionVariables.get('orderId');",
+                  "pm.test('[Pre] orderId is set', () => {",
+                  "    pm.expect(orderId, 'Run Create Orders first').to.be.a('string').and.not.empty;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200 OK', () => pm.response.to.have.status(200));",
+                  "",
+                  "const res = pm.response.json();",
+                  "",
+                  "pm.test('Order id matches', () => {",
+                  "    pm.expect(res.order.id).to.eql(pm.collectionVariables.get('orderId'));",
+                  "});",
+                  "",
+                  "pm.test('Order has required fields', () => {",
+                  "    pm.expect(res.order).to.have.property('status');",
+                  "    pm.expect(res.order).to.have.property('items');",
+                  "    pm.expect(res.order).to.have.property('total');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{Url_env}}/api/orders/{{orderId}}"
+          }
+        },
+        {
+          "name": "Update order by id",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "const orderId = pm.environment.get('orderId') || pm.collectionVariables.get('orderId');",
+                  "pm.test('[Pre] orderId is set', () => {",
+                  "    pm.expect(orderId).to.be.a('string').and.not.empty;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200 OK', () => pm.response.to.have.status(200));",
+                  "",
+                  "const res = pm.response.json();",
+                  "",
+                  "pm.test('Order status updated to confirmed', () => {",
+                  "    pm.expect(res.order.status).to.eql('confirmed');",
+                  "});",
+                  "",
+                  "pm.test('Order total recalculated', () => {",
+                  "    pm.expect(res.order.total).to.eql(59.97);",
+                  "});",
+                  "",
+                  "pm.test('Items quantity updated', () => {",
+                  "    pm.expect(res.order.items[0].quantity).to.eql(3);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"confirmed\",\n  \"items\": [\n    { \"name\": \"Widget\", \"quantity\": 3, \"price\": 19.99 }\n  ]\n}"
+            },
+            "url": "{{Url_env}}/api/orders/{{orderId}}"
+          }
+        },
+        {
+          "name": "Update order status",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200 OK', () => pm.response.to.have.status(200));",
+                  "",
+                  "const res = pm.response.json();",
+                  "",
+                  "pm.test('Order status is processing', () => {",
+                  "    pm.expect(res.order.status).to.eql('processing');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"processing\"\n}"
+            },
+            "url": "{{Url_env}}/api/orders/{{orderId}}/status"
+          }
+        },
+        {
+          "name": "Cancel order",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200 OK', () => pm.response.to.have.status(200));",
+                  "",
+                  "const res = pm.response.json();",
+                  "",
+                  "pm.test('Order cancelled', () => {",
+                  "    pm.expect(res.order.status).to.eql('cancelled');",
+                  "    pm.expect(res.message).to.eql('order cancelled');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{Url_env}}/api/orders/{{orderId}}/cancel"
+          }
+        },
+        {
+          "name": "Delete order by id",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "const orderId = pm.environment.get('orderId') || pm.collectionVariables.get('orderId');",
+                  "pm.test('[Pre] orderId is set', () => {",
+                  "    pm.expect(orderId).to.be.a('string').and.not.empty;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200 OK', () => pm.response.to.have.status(200));",
+                  "pm.test('Delete order success message', () => {",
+                  "    pm.expect(pm.response.json().message).to.eql('your order is deleted successfully');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "url": "{{Url_env}}/api/orders/{{orderId}}"
+          }
+        }
+      ]
+    }
+  ]
+}

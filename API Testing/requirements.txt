@@ -1,0 +1,46 @@
+# ============================================================
+# API Testing Backend - Required Dependencies (Node.js)
+# ============================================================
+#
+# This project uses Node.js + npm (not Python pip).
+#
+# QUICK SETUP (Windows - automatic):
+#   Double-click setup.bat
+#
+# QUICK SETUP (manual CMD):
+#   1. npm install
+#   2. copy .env.example .env
+#   3. npm run dev
+#
+# Server: http://localhost:3000
+# Import Postman collection from: postman/API-Testing.postman_collection.json
+#
+# ============================================================
+# PRODUCTION DEPENDENCIES (required to run the API)
+# ============================================================
+
+express==4.21.2
+bcryptjs==3.0.3
+cookie-parser==1.4.7
+dotenv==16.6.1
+helmet==7.2.0
+jsonwebtoken==9.0.3
+morgan==1.10.0
+
+# ============================================================
+# DEVELOPMENT DEPENDENCIES (optional - auto-restart on save)
+# ============================================================
+
+nodemon==3.1.10
+
+# ============================================================
+# INSTALL COMMAND (use this - reads package.json)
+# ============================================================
+#
+#   npm install
+#
+# Or production only (no nodemon):
+#
+#   npm install --omit=dev
+#
+# ============================================================

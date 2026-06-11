@@ -1,0 +1,410 @@
+{
+  "info": {
+    "_postman_id": "39754000-19dd-462f-8ffc-cea452e1257c",
+    "name": "Students Collections",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "50131647"
+  },
+  "item": [
+    {
+      "name": "Get All Student Details",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Sucessful Get request\" ,() => {\r",
+              "    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
+              "});\r",
+              "\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "console.log(\"pre-request at Request level.\");"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "apikey",
+          "apikey": [
+            {
+              "key": "value",
+              "value": "qwertyuioasdfghjk34567dfghj",
+              "type": "string"
+            },
+            {
+              "key": "key",
+              "value": "x-api-key",
+              "type": "string"
+            },
+            {
+              "key": "in",
+              "value": "header",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "{{QA}}",
+          "host": [
+            "{{QA}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Single Student Details",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "//\r",
+              "console.log(pm.globals.get(\"Userid_global\"));\r",
+              "console.log(pm.environment.get(\"dev_env\"));\r",
+              "console.log(pm.collectionVariables.get(\"url_colllection\"));\r",
+              "\r",
+              "\r",
+              "//global veraible\r",
+              "pm.globals.set(\"Userid_global\", \"2\");\r",
+              "\r",
+              "//environment variables\r",
+              "pm.environment.set(\"dev_env\",\"http://localhost:3000/students\")\r",
+              "\r",
+              "//collection variables\r",
+              "pm.collectionVariables.set(\"url_colllection\", \"http://localhost:3000/students\")\r",
+              "\r",
+              "\r",
+              "//deletion variables\r",
+              "// pm.collectionVariables.unset(\"url_colllection\")"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{url_colllection}}/{{Userid_global}}",
+          "host": [
+            "{{url_colllection}}"
+          ],
+          "path": [
+            "{{Userid_global}}"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Get Single Student Details",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url_colllection}}/{{Userid_global}}",
+              "host": [
+                "{{url_colllection}}"
+              ],
+              "path": [
+                "{{Userid_global}}"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "tinyhttp"
+            },
+            {
+              "key": "Access-Control-Allow-Origin",
+              "value": "*"
+            },
+            {
+              "key": "Access-Control-Allow-Methods",
+              "value": "GET, HEAD, PUT, PATCH, POST, DELETE"
+            },
+            {
+              "key": "Access-Control-Allow-Headers",
+              "value": "content-type"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Date",
+              "value": "Tue, 09 Jun 2026 05:11:41 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            },
+            {
+              "key": "Content-Length",
+              "value": "128"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"id\": \"2\",\n    \"name\": \"Kim\",\n    \"location\": \"US\",\n    \"phone\": \"9876543213\",\n    \"courses\": [\n        \"Python\",\n        \"Playwright\"\n    ]\n}"
+        },
+        {
+          "name": "Get Single Student Details",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url_colllection}}/{{Userid_global}}",
+              "host": [
+                "{{url_colllection}}"
+              ],
+              "path": [
+                "{{Userid_global}}"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "tinyhttp"
+            },
+            {
+              "key": "Access-Control-Allow-Origin",
+              "value": "*"
+            },
+            {
+              "key": "Access-Control-Allow-Methods",
+              "value": "GET, HEAD, PUT, PATCH, POST, DELETE"
+            },
+            {
+              "key": "Access-Control-Allow-Headers",
+              "value": "content-type"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Date",
+              "value": "Tue, 09 Jun 2026 05:11:41 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            },
+            {
+              "key": "Content-Length",
+              "value": "128"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"id\": \"2\",\n    \"name\": \"Kim\",\n    \"location\": \"US\",\n    \"phone\": \"9876543213\",\n    \"courses\": [\n        \"Python\",\n        \"Playwright\"\n    ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "Create Student",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// pm.test('Content-Type header is application/json', () => {\r",
+              "//     pm.expect(pm.response.headers.get('Content-Type'))\r",
+              "//         .to.eql('application/json; charset=utf-8');\r",
+              "// });\r",
+              "\r",
+              "pm.test(\"Status code is 201\", function () {\r",
+              "    pm.response.to.have.status(201);\r",
+              "});\r",
+              "\r",
+              "var jsonData = pm.response.json();\r",
+              "\r",
+              "pm.test(\"Validate response body values\", function () {\r",
+              "\r",
+              "    pm.expect(jsonData.name).to.eql(\"Darshan\");\r",
+              "    pm.expect(jsonData.location).to.eql(\"India\");\r",
+              "    pm.expect(jsonData.phone).to.eql(\"1234567890\");\r",
+              "    pm.expect(jsonData.courses).to.be.an(\"array\");\r",
+              "    pm.expect(jsonData.courses).to.include(\"Java\");\r",
+              "    pm.expect(jsonData.courses).to.include(\"Selenium\");\r",
+              "    pm.expect(jsonData.id).to.exist;\r",
+              "});\r",
+              "\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "//local veraible\r",
+              "pm.variables.set(\"name\", \"PatelDarshan\");"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"name\": \"{{name}}\",\r\n    \"location\": \"India\",\r\n    \"phone\": \"1234567890\",\r\n    \"courses\": [\r\n        \"Java\",\r\n        \"Selenium\"\r\n    ]\r\n}",
+          "options": {
+            "raw": {
+              "language": "html"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url_global}}",
+          "host": [
+            "{{url_global}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Student Details",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"name\": \"Darshan\",\r\n    \"location\": \"India\",\r\n    \"phone\": \"1234567899\",\r\n    \"courses\": [\r\n        \"C#\",\r\n        \"Playwright\"\r\n    ]\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url_global}}/XNg9G5_rswA",
+          "host": [
+            "{{url_global}}"
+          ],
+          "path": [
+            "XNg9G5_rswA"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Student",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{url_global}}/XNg9G5_rswA",
+          "host": [
+            "{{url_global}}"
+          ],
+          "path": [
+            "XNg9G5_rswA"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          "console.log(\"pre-request at folder level.\");"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "url_colllectio",
+      "value": ""
+    },
+    {
+      "key": "url_colllection",
+      "value": ""
+    }
+  ]
+}

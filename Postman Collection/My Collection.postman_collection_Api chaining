@@ -1,0 +1,2831 @@
+{
+  "info": {
+    "_postman_id": "f53a6c61-a61a-46c9-98ae-dda0506acef5",
+    "name": "My Collection",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "50131647",
+    "_collection_link": "https://go.postman.co/collection/50131647-f53a6c61-a61a-46c9-98ae-dda0506acef5?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Create user",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "let jsonData = pm.response.json();",
+              "",
+              "// User Details",
+              "pm.collectionVariables.set(\"user_id\", jsonData.user.id);",
+              "pm.collectionVariables.set(\"user_name\", jsonData.user.name);",
+              "pm.collectionVariables.set(\"user_email\", jsonData.user.email);",
+              "pm.collectionVariables.set(\"accessToken\", jsonData.accessToken);",
+              "pm.collectionVariables.set(\"refreshToken\", jsonData.refreshToken);",
+              "pm.collectionVariables.set(\"tokenType\", jsonData.tokenType);",
+              "",
+              "// Console Output",
+              "console.log(\"User ID :\", pm.collectionVariables.get(\"user_id\"));",
+              "console.log(\"Access Token :\", pm.collectionVariables.get(\"accessToken\"));",
+              "",
+              "",
+              "// Status Code Validation",
+              "pm.test(\"Status Code is 201\", function () { ",
+              "    pm.response.to.have.status(201); ",
+              "    });",
+              "",
+              "//response time Validation",
+              "pm.test(\"Response time is less than 2000 ms\", function () { ",
+              "    pm.expect(pm.response.responseTime).to.be.below(2000); ",
+              "    });",
+              "",
+              "//Header Validation",
+              "pm.test(\"Content-Type is application/json\", function () { pm.expect(pm.response.headers.get(\"Content-Type\")) .to.include(\"application/json\"); });",
+              "",
+              "// User Object Validation",
+              "pm.test(\"User object exists\", function () { ",
+              "    pm.expect(jsonData.user).to.not.be.null; ",
+              "    });",
+              "",
+              "pm.test(\"User ID is present\", function () { ",
+              "    pm.expect(jsonData.user.id).to.not.be.empty; ",
+              "    });",
+              "",
+              "pm.test(\"User Name is present\", function () { ",
+              "    pm.expect(jsonData.user.name).to.not.be.empty; ",
+              "    });",
+              "",
+              "pm.test(\"User Email is present\", function () { ",
+              "    pm.expect(jsonData.user.email).to.not.be.empty; ",
+              "    });",
+              "",
+              "    // Data Type Validation",
+              "pm.test(\"User ID is String\", function () { ",
+              "    pm.expect(jsonData.user.id).to.be.a(\"string\"); ",
+              "    });",
+              "",
+              "pm.test(\"User ID is String\", function () { ",
+              "    pm.expect(jsonData.user.id).to.be.a(\"string\"); ",
+              "    });",
+              "",
+              "",
+              "// Token Validation",
+              "",
+              "pm.test(\"Access Token is not empty\", function () {",
+              "    pm.expect(jsonData.accessToken).to.not.be.empty;",
+              "});",
+              "",
+              "pm.test(\"Refresh Token is not empty\", function () {",
+              "    pm.expect(jsonData.refreshToken).to.not.be.empty;",
+              "});",
+              "",
+              "pm.test(\"Token Type is Bearer\", function () {",
+              "    pm.expect(jsonData.tokenType).to.eql(\"Bearer\");",
+              "});",
+              "",
+              "",
+              "// Email Validation",
+              "pm.test(\"Email contains @gmail.com\", function () {",
+              "    pm.expect(jsonData.user.email).to.include(\"@gmail.com\");",
+              "});",
+              "",
+              "// Created & Updated Date Validation",
+              "pm.test(\"createdAt is present\", function () {",
+              "    pm.expect(jsonData.user.createdAt).to.not.be.empty;",
+              "});",
+              "",
+              "pm.test(\"updatedAt is present\", function () {",
+              "    pm.expect(jsonData.user.updatedAt).to.not.be.empty;",
+              "});",
+              "",
+              "// Success Message Validation",
+              "",
+              "pm.test(\"Registration Successful Message\", function () {",
+              "    pm.expect(jsonData.message)",
+              "        .to.eql(\"registered successfully\");",
+              "});",
+              "",
+              "",
+              "//Console log",
+              " console.log(\"User ID:\", jsonData.user.id);",
+              " console.log(\"Email:\", jsonData.user.email); ",
+              " console.log(\"Access Token:\", jsonData.accessToken); ",
+              " console.log(\"Refresh Token:\", jsonData.refreshToken);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "//create  random email\r",
+              "var random = Math.random().toString(36).substring(2);\r",
+              "\r",
+              "var email = \"Donbanegajon\"+random + \"@gmail.com\";\r",
+              "var username = \"Donbanegajon\"+random;\r",
+              "\r",
+              "pm.environment.set(\"email_env\", email);\r",
+              "pm.environment.set(\"username_env\", username);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "apikey",
+          "apikey": [
+            {
+              "key": "value",
+              "value": "qwertyuioasdfghjk34567dfghj",
+              "type": "string"
+            },
+            {
+              "key": "key",
+              "value": "x-api-key",
+              "type": "string"
+            },
+            {
+              "key": "in",
+              "value": "header",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "",
+            "value": "",
+            "type": "text",
+            "disabled": true
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"name\": \"{{username_env}}\",\r\n  \"email\": \"{{email_env}}\",\r\n  \"password\": \"{{user_password}}\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{Url_env}}/api/register",
+          "host": [
+            "{{Url_env}}"
+          ],
+          "path": [
+            "api",
+            "register"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Login User",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "let jsonData = pm.response.json();",
+              "",
+              "// User Details",
+              "pm.collectionVariables.set(\"login_user_email\", jsonData.user.email);",
+              "pm.collectionVariables.set(\"login_accessToken\", jsonData.accessToken);",
+              "pm.collectionVariables.set(\"login_refreshToken\", jsonData.refreshToken);",
+              "pm.collectionVariables.set(\"login_tokenType\", jsonData.tokenType);",
+              "",
+              "// Console Output",
+              "console.log(\"User ID :\", pm.collectionVariables.get(\"user_id\"));",
+              "console.log(\"Login Access Token :\", pm.collectionVariables.get(\"login_accessToken\"));",
+              "",
+              "// Status Code Validation",
+              "pm.test(\"Status Code is 200\", function () { ",
+              "    pm.response.to.have.status(200); ",
+              "    });",
+              "",
+              "//response time Validation",
+              "pm.test(\"Response time is less than 2000 ms\", function () { ",
+              "    pm.expect(pm.response.responseTime).to.be.below(2000); ",
+              "    });",
+              "",
+              "//Header Validation",
+              "pm.test(\"Content-Type is application/json\", function () { pm.expect(pm.response.headers.get(\"Content-Type\")) .to.include(\"application/json\"); });",
+              "",
+              "// Token Validation",
+              "",
+              "pm.test(\"Access Token is not empty\", function () {",
+              "    pm.expect(jsonData.accessToken).to.not.be.empty;",
+              "});",
+              "",
+              "pm.test(\"Refresh Token is not empty\", function () {",
+              "    pm.expect(jsonData.refreshToken).to.not.be.empty;",
+              "});",
+              "",
+              "pm.test(\"Token Type is Bearer\", function () {",
+              "    pm.expect(jsonData.tokenType).to.eql(\"Bearer\");",
+              "});",
+              "",
+              "// Email Validation",
+              "pm.test(\"Email contains @gmail.com\", function () {",
+              "    pm.expect(jsonData.user.email).to.include(\"@gmail.com\");",
+              "});",
+              "",
+              "// Created & Updated Date Validation",
+              "pm.test(\"createdAt is present\", function () {",
+              "    pm.expect(jsonData.user.createdAt).to.not.be.empty;",
+              "});",
+              "",
+              "pm.test(\"updatedAt is present\", function () {",
+              "    pm.expect(jsonData.user.updatedAt).to.not.be.empty;",
+              "});",
+              "",
+              "// Success Message Validation",
+              "pm.test(\"Log in successfully Message\", function () {",
+              "    pm.expect(jsonData.message)",
+              "        .to.eql(\"logged in successfully\");",
+              "});",
+              "",
+              "//Console log",
+              " console.log(\"User ID:\", jsonData.user.id);",
+              " console.log(\"Email:\", jsonData.user.email); ",
+              " console.log(\"Access Token:\", jsonData.accessToken); ",
+              " console.log(\"Refresh Token:\", jsonData.refreshToken);",
+              "",
+              " "
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "apikey",
+          "apikey": [
+            {
+              "key": "value",
+              "value": "qwertyuioasdfghjk34567dfghj",
+              "type": "string"
+            },
+            {
+              "key": "key",
+              "value": "x-api-key",
+              "type": "string"
+            },
+            {
+              "key": "in",
+              "value": "header",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "",
+            "value": "",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n     \"email\":\"{{email_env}}\",\r\n     \"password\":\"{{user_password}}\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/api/login",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get user details",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "// Validate Collection Variables\r",
+              "pm.test(\"User ID variable exists\", function () {\r",
+              "    pm.expect(pm.collectionVariables.get(\"user_id\")).to.not.be.null;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Access Token variable exists\", function () {\r",
+              "    pm.expect(pm.collectionVariables.get(\"accessToken\")).to.not.be.null;\r",
+              "});\r",
+              "\r",
+              "// Print values in Console\r",
+              "console.log(\"User ID :\", pm.collectionVariables.get(\"user_id\"));\r",
+              "console.log(\"Access Token :\", pm.collectionVariables.get(\"accessToken\"));\r",
+              "\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "let jsonData = pm.response.json();\r",
+              "\r",
+              "// Status Code Validation\r",
+              "pm.test(\"Status Code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "// Response Time Validation\r",
+              "pm.test(\"Response Time < 2000 ms\", function () {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+              "});\r",
+              "\r",
+              "// Header Validation\r",
+              "pm.test(\"Content-Type is application/json\", function () {\r",
+              "    pm.expect(pm.response.headers.get(\"Content-Type\"))\r",
+              "      .to.include(\"application/json\");\r",
+              "});\r",
+              "\r",
+              "// Field Presence Validation\r",
+              "pm.test(\"ID is present\", function () {\r",
+              "    pm.expect(jsonData.id).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Name is present\", function () {\r",
+              "    pm.expect(jsonData.name).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Email is present\", function () {\r",
+              "    pm.expect(jsonData.email).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "// Data Type Validation\r",
+              "pm.test(\"ID is String\", function () {\r",
+              "    pm.expect(jsonData.id).to.be.a(\"string\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Name is String\", function () {\r",
+              "    pm.expect(jsonData.name).to.be.a(\"string\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Email is String\", function () {\r",
+              "    pm.expect(jsonData.email).to.be.a(\"string\");\r",
+              "});\r",
+              "\r",
+              "// Email Validation\r",
+              "pm.test(\"Email contains @\", function () {\r",
+              "    pm.expect(jsonData.email).to.include(\"@\");\r",
+              "});\r",
+              "\r",
+              "\r",
+              "// Variable Comparison\r",
+              "pm.test(\"User ID matches Collection Variable\", function () {\r",
+              "    pm.expect(jsonData.id)\r",
+              "      .to.eql(pm.collectionVariables.get(\"user_id\"));\r",
+              "});\r",
+              "\r",
+              "\r",
+              "// Store Values for Chaining\r",
+              "pm.collectionVariables.set(\"user_name\", jsonData.name);\r",
+              "pm.collectionVariables.set(\"user_email\", jsonData.email);\r",
+              "\r",
+              "\r",
+              "// Console Logs\r",
+              "console.log(\"User ID :\", jsonData.id);\r",
+              "console.log(\"User Name :\", jsonData.name);\r",
+              "console.log(\"User Email :\", jsonData.email);\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "apikey",
+          "apikey": [
+            {
+              "key": "key",
+              "value": "x-api-key",
+              "type": "string"
+            },
+            {
+              "key": "in",
+              "value": "header",
+              "type": "string"
+            },
+            {
+              "key": "value",
+              "value": "qwertyuioasdfghjk34567dfghj",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-api-key",
+            "value": "qwertyuioasdfghjk34567dfghj",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{login_accessToken}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:3000/api/users/{{user_id}}",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "users",
+            "{{user_id}}"
+          ],
+          "query": [
+            {
+              "key": "",
+              "value": "",
+              "type": "text",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update user details",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "//create  random email\r",
+              "var random = Math.random().toString(36).substring(2);\r",
+              "\r",
+              "var email = \"Donbanegajon\"+random + \"@gmail.com\";\r",
+              "var username = \"Donbanegajon\"+random;\r",
+              "\r",
+              "pm.environment.set(\"email_env\", email);\r",
+              "pm.environment.set(\"username_env\", username);\r",
+              "\r",
+              "// Validate Collection Variables\r",
+              "\r",
+              "pm.test(\"User ID exists\", function () {\r",
+              "    pm.expect(pm.collectionVariables.get(\"user_id\")).to.not.be.null;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Access Token exists\", function () {\r",
+              "    pm.expect(pm.collectionVariables.get(\"login_accessToken\")).to.not.be.null;\r",
+              "});\r",
+              "\r",
+              "// Validate Environment Variables\r",
+              "\r",
+              "pm.test(\"Username exists\", function () {\r",
+              "    pm.expect(pm.environment.get(\"username_env\")).to.not.be.null;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Email exists\", function () {\r",
+              "    pm.expect(pm.environment.get(\"email_env\")).to.not.be.null;\r",
+              "});\r",
+              "\r",
+              "// Print values in Console\r",
+              "console.log(\"User ID :\", pm.collectionVariables.get(\"user_id\"));\r",
+              "console.log(\"Username :\", pm.environment.get(\"username_env\"));\r",
+              "console.log(\"Email :\", pm.environment.get(\"email_env\"));\r",
+              "console.log(\"Access Token :\", pm.collectionVariables.get(\"login_accessToken\"));"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "let jsonData = pm.response.json();\r",
+              "\r",
+              "// Status Code Validation\r",
+              "pm.test(\"Status Code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "// Response Time Validation\r",
+              "pm.test(\"Response time is less than 2000 ms\", function () {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+              "});\r",
+              "\r",
+              "// Header Validation\r",
+              "pm.test(\"Content-Type is application/json\", function () {\r",
+              "    pm.expect(pm.response.headers.get(\"Content-Type\"))\r",
+              "      .to.include(\"application/json\");\r",
+              "});\r",
+              "\r",
+              "// User Object Validation\r",
+              "pm.test(\"User object exists\", function () {\r",
+              "    pm.expect(jsonData.user).to.not.be.null;\r",
+              "});\r",
+              "\r",
+              "// Field Presence Validation\r",
+              "pm.test(\"User ID is present\", function () {\r",
+              "    pm.expect(jsonData.user.id).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"User Name is present\", function () {\r",
+              "    pm.expect(jsonData.user.name).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"User Email is present\", function () {\r",
+              "    pm.expect(jsonData.user.email).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "// Data Type Validation\r",
+              "pm.test(\"User ID is String\", function () {\r",
+              "    pm.expect(jsonData.user.id).to.be.a(\"string\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"User Name is String\", function () {\r",
+              "    pm.expect(jsonData.user.name).to.be.a(\"string\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"User Email is String\", function () {\r",
+              "    pm.expect(jsonData.user.email).to.be.a(\"string\");\r",
+              "});\r",
+              "\r",
+              "// Updated Data Validation\r",
+              "pm.test(\"Updated name matches request\", function () {\r",
+              "    pm.expect(jsonData.user.name)\r",
+              "      .to.eql(pm.environment.get(\"username_env\"));\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Updated email matches request\", function () {\r",
+              "    pm.expect(jsonData.user.email)\r",
+              "      .to.eql(pm.environment.get(\"email_env\"));\r",
+              "});\r",
+              "\r",
+              "// Store Updated Values\r",
+              "pm.collectionVariables.set(\"user_name\", jsonData.user.name);\r",
+              "pm.collectionVariables.set(\"user_email\", jsonData.user.email);\r",
+              "pm.collectionVariables.set(\"user_id\", jsonData.user.id);\r",
+              "\r",
+              "// Date Validation\r",
+              "pm.test(\"createdAt is present\", function () {\r",
+              "    pm.expect(jsonData.user.createdAt).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"updatedAt is present\", function () {\r",
+              "    pm.expect(jsonData.user.updatedAt).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "// Console Logs\r",
+              "console.log(\"Updated User ID :\", jsonData.user.id);\r",
+              "console.log(\"Updated Name :\", jsonData.user.name);\r",
+              "console.log(\"Updated Email :\", jsonData.user.email);\r",
+              "console.log(\"Created At :\", jsonData.user.createdAt);\r",
+              "console.log(\"Updated At :\", jsonData.user.updatedAt);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "apikey",
+          "apikey": [
+            {
+              "key": "key",
+              "value": "x-api-key",
+              "type": "string"
+            },
+            {
+              "key": "in",
+              "value": "header",
+              "type": "string"
+            },
+            {
+              "key": "value",
+              "value": "qwertyuioasdfghjk34567dfghj",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{login_accessToken}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"name\":\"{{username_env}}\",\r\n    \"email\": \"{{email_env}}\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/api/users/{{user_id}}",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "users",
+            "{{user_id}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Orders",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "// Validate Required Variables\r",
+              "\r",
+              "pm.test(\"Access Token exists\", function () {\r",
+              "    pm.expect(pm.collectionVariables.get(\"login_accessToken\")).to.not.be.null;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"User ID exists\", function () {\r",
+              "    pm.expect(pm.collectionVariables.get(\"user_id\")).to.not.be.null;\r",
+              "});\r",
+              "\r",
+              "// Log Variables\r",
+              "console.log(\"Access Token:\", pm.collectionVariables.get(\"login_accessToken\"));\r",
+              "console.log(\"User ID:\", pm.collectionVariables.get(\"user_id\"));\r",
+              "\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "let jsonData = pm.response.json();\r",
+              "\r",
+              "// Store Variables for Chaining\r",
+              "pm.collectionVariables.set(\"order_id\", jsonData.order.id);\r",
+              "pm.collectionVariables.set(\"order_status\", jsonData.order.status);\r",
+              "pm.collectionVariables.set(\"order_total\", jsonData.order.total);\r",
+              "\r",
+              "// Status Code Validation\r",
+              "pm.test(\"Status Code is 201\", function () {\r",
+              "    pm.response.to.have.status(201);\r",
+              "});\r",
+              "\r",
+              "// Response Time Validation\r",
+              "pm.test(\"Response time is less than 2000ms\", function () {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+              "});\r",
+              "\r",
+              "// Header Validation\r",
+              "pm.test(\"Content-Type is application/json\", function () {\r",
+              "    pm.expect(pm.response.headers.get(\"Content-Type\"))\r",
+              "        .to.include(\"application/json\");\r",
+              "});\r",
+              "\r",
+              "// Order Object Validation\r",
+              "pm.test(\"Order object exists\", function () {\r",
+              "    pm.expect(jsonData.order).to.not.be.null;\r",
+              "});\r",
+              "\r",
+              "// Field Presence Validation\r",
+              "pm.test(\"Order ID is present\", function () {\r",
+              "    pm.expect(jsonData.order.id).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"User ID is present\", function () {\r",
+              "    pm.expect(jsonData.order.userId).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Customer Name is present\", function () {\r",
+              "    pm.expect(jsonData.order.customerName).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Customer Email is present\", function () {\r",
+              "    pm.expect(jsonData.order.customerEmail).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "// Data Type Validation\r",
+              "pm.test(\"Order ID is String\", function () {\r",
+              "    pm.expect(jsonData.order.id).to.be.a(\"string\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"User ID is String\", function () {\r",
+              "    pm.expect(jsonData.order.userId).to.be.a(\"string\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Customer Name is String\", function () {\r",
+              "    pm.expect(jsonData.order.customerName).to.be.a(\"string\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Customer Email is String\", function () {\r",
+              "    pm.expect(jsonData.order.customerEmail).to.be.a(\"string\");\r",
+              "});\r",
+              "\r",
+              "// Business Validation\r",
+              "\r",
+              "pm.test(\"Order Status is pending\", function () {\r",
+              "    pm.expect(jsonData.order.status).to.eql(\"pending\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Default Status is pending\", function () {\r",
+              "    pm.expect(jsonData.defaultStatus).to.eql(\"pending\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Order Created Successfully Message\", function () {\r",
+              "    pm.expect(jsonData.message)\r",
+              "        .to.eql(\"order created successfully\");\r",
+              "});\r",
+              "\r",
+              "// Customer Validation\r",
+              "\r",
+              "pm.test(\"Customer Name Validation\", function () {\r",
+              "    pm.expect(jsonData.order.customerName)\r",
+              "        .to.eql(\"{{username_env}}\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Customer Email Validation\", function () {\r",
+              "    pm.expect(jsonData.order.customerEmail)\r",
+              "        .to.eql(\"{{email_env}}\");\r",
+              "});\r",
+              "\r",
+              "// Item Validation\r",
+              "pm.test(\"Items array exists\", function () {\r",
+              "    pm.expect(jsonData.order.items).to.be.an(\"array\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Items count is 1\", function () {\r",
+              "    pm.expect(jsonData.order.items.length).to.eql(1);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Item name validation\", function () {\r",
+              "    pm.expect(jsonData.order.items[0].name)\r",
+              "        .to.eql(\"Widget\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Item quantity validation\", function () {\r",
+              "    pm.expect(jsonData.order.items[0].quantity)\r",
+              "        .to.eql(2);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Item price validation\", function () {\r",
+              "    pm.expect(jsonData.order.items[0].price)\r",
+              "        .to.eql(19.99);\r",
+              "});\r",
+              "\r",
+              "// Total Validation\r",
+              "pm.test(\"Order total is correct\", function () {\r",
+              "    pm.expect(jsonData.order.total)\r",
+              "        .to.eql(39.98);\r",
+              "});\r",
+              "\r",
+              "// Shipping Address Validation\r",
+              "pm.test(\"City is Mumbai\", function () {\r",
+              "    pm.expect(jsonData.order.shippingAddress.city)\r",
+              "        .to.eql(\"Mumbai\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Country is IN\", function () {\r",
+              "    pm.expect(jsonData.order.shippingAddress.country)\r",
+              "        .to.eql(\"IN\");\r",
+              "});\r",
+              "\r",
+              "// Date Validation\r",
+              "pm.test(\"CreatedAt exists\", function () {\r",
+              "    pm.expect(jsonData.order.createdAt).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"UpdatedAt exists\", function () {\r",
+              "    pm.expect(jsonData.order.updatedAt).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "// Console Logs\r",
+              "console.log(\"Order ID:\", jsonData.order.id);\r",
+              "console.log(\"Order Status:\", jsonData.order.status);\r",
+              "console.log(\"Order Total:\", jsonData.order.total);\r",
+              "console.log(\"Customer:\", jsonData.order.customerName);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{login_accessToken}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"customerName\": \"{{username_env}}\",\r\n  \"customerEmail\": \"{{email_env}}\",\r\n  \"userId\": \"{{user_id}}\",\r\n  \"items\": [\r\n    { \"name\": \"Widget\", \"quantity\": 3, \"price\": 19.99 }\r\n  ],\r\n  \"shippingAddress\": {\r\n    \"street\": \"123 Main St\",\r\n    \"city\": \"Mumbai\",\r\n    \"state\": \"MH\",\r\n    \"zip\": \"400001\",\r\n    \"country\": \"IN\"\r\n  },\r\n  \"notes\": \"Leave at door\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{Url_env}}/api/orders",
+          "host": [
+            "{{Url_env}}"
+          ],
+          "path": [
+            "api",
+            "orders"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "List Of Orders",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "// Validate Environment Variable\r",
+              "\r",
+              "pm.test(\"Base URL exists\", function () {\r",
+              "    pm.expect(pm.environment.get(\"Url_env\")).to.not.be.null;\r",
+              "});\r",
+              "\r",
+              "// Validate Collection Variables\r",
+              "\r",
+              "pm.test(\"Access Token exists\", function () {\r",
+              "    pm.expect(pm.collectionVariables.get(\"login_accessToken\")).to.not.be.null;\r",
+              "});\r",
+              "\r",
+              "// Print Variables\r",
+              "console.log(\"Base URL :\", pm.environment.get(\"Url_env\"));\r",
+              "console.log(\"Access Token :\", pm.collectionVariables.get(\"login_accessToken\"));\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "let jsonData = pm.response.json();\r",
+              "\r",
+              "// Status Code Validation\r",
+              "pm.test(\"Status Code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "// Response Time Validation\r",
+              "pm.test(\"Response Time less than 2000ms\", function () {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+              "});\r",
+              "\r",
+              "// Header Validation\r",
+              "pm.test(\"Content-Type is application/json\", function () {\r",
+              "    pm.expect(pm.response.headers.get(\"Content-Type\"))\r",
+              "      .to.include(\"application/json\");\r",
+              "});\r",
+              "\r",
+              "// Orders Array Validation\r",
+              "pm.test(\"Orders array exists\", function () {\r",
+              "    pm.expect(jsonData.orders).to.be.an(\"array\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Orders array is not empty\", function () {\r",
+              "    pm.expect(jsonData.orders.length).to.be.greaterThan(0);\r",
+              "});\r",
+              "\r",
+              "// Pagination Validation\r",
+              "pm.test(\"Page value is correct\", function () {\r",
+              "    pm.expect(jsonData.page).to.eql(1);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Limit value is correct\", function () {\r",
+              "    pm.expect(jsonData.limit).to.eql(20);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Total Orders is greater than 0\", function () {\r",
+              "    pm.expect(jsonData.total).to.be.greaterThan(0);\r",
+              "});\r",
+              "\r",
+              "// First Order Validation\r",
+              "let firstOrder = jsonData.orders[0];\r",
+              "\r",
+              "pm.test(\"Order ID exists\", function () {\r",
+              "    pm.expect(firstOrder.id).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"User ID exists\", function () {\r",
+              "    pm.expect(firstOrder.userId).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Customer Name exists\", function () {\r",
+              "    pm.expect(firstOrder.customerName).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Customer Email exists\", function () {\r",
+              "    pm.expect(firstOrder.customerEmail).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "// Data Type Validation\r",
+              "pm.test(\"Order ID is String\", function () {\r",
+              "    pm.expect(firstOrder.id).to.be.a(\"string\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"User ID is String\", function () {\r",
+              "    pm.expect(firstOrder.userId).to.be.a(\"string\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Customer Name is String\", function () {\r",
+              "    pm.expect(firstOrder.customerName).to.be.a(\"string\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Customer Email is String\", function () {\r",
+              "    pm.expect(firstOrder.customerEmail).to.be.a(\"string\");\r",
+              "});\r",
+              "\r",
+              "// Business Validation\r",
+              "pm.test(\"Order Status is pending\", function () {\r",
+              "    pm.expect(firstOrder.status).to.eql(\"pending\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Order Total is greater than 0\", function () {\r",
+              "    pm.expect(firstOrder.total).to.be.above(0);\r",
+              "});\r",
+              "\r",
+              "// Items Validation\r",
+              "pm.test(\"Items array exists\", function () {\r",
+              "    pm.expect(firstOrder.items).to.be.an(\"array\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Items array is not empty\", function () {\r",
+              "    pm.expect(firstOrder.items.length).to.be.greaterThan(0);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Item Name is Widget\", function () {\r",
+              "    pm.expect(firstOrder.items[0].name).to.eql(\"Widget\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Item Quantity is 2\", function () {\r",
+              "    pm.expect(firstOrder.items[0].quantity).to.eql(2);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Item Price is 19.99\", function () {\r",
+              "    pm.expect(firstOrder.items[0].price).to.eql(19.99);\r",
+              "});\r",
+              "\r",
+              "// Shipping Address Validation\r",
+              "pm.test(\"City is Mumbai\", function () {\r",
+              "    pm.expect(firstOrder.shippingAddress.city)\r",
+              "      .to.eql(\"Mumbai\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Country is IN\", function () {\r",
+              "    pm.expect(firstOrder.shippingAddress.country)\r",
+              "      .to.eql(\"IN\");\r",
+              "});\r",
+              "\r",
+              "// Cookie Validation\r",
+              "pm.test(\"Cookies are present\", function () {\r",
+              "    pm.expect(pm.cookies.count()).to.be.greaterThan(0);\r",
+              "});\r",
+              "\r",
+              "// Store Variables for Chaining\r",
+              "pm.collectionVariables.set(\"order_id\", firstOrder.id);\r",
+              "pm.collectionVariables.set(\"order_status\", firstOrder.status);\r",
+              "pm.collectionVariables.set(\"order_total\", firstOrder.total);\r",
+              "\r",
+              "// Console Logs\r",
+              "console.log(\"Total Orders :\", jsonData.total);\r",
+              "console.log(\"First Order ID :\", firstOrder.id);\r",
+              "console.log(\"Order Status :\", firstOrder.status);\r",
+              "console.log(\"Order Total :\", firstOrder.total);\r",
+              "\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{login_accessToken}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{Url_env}}/api/orders",
+          "host": [
+            "{{Url_env}}"
+          ],
+          "path": [
+            "api",
+            "orders"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "List Orders For a User",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "// Validate Required Variables\r",
+              "pm.test(\"Base URL exists\", function () {\r",
+              "    pm.expect(pm.environment.get(\"Url_env\")).to.not.be.null;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"User ID exists\", function () {\r",
+              "    pm.expect(pm.collectionVariables.get(\"user_id\")).to.not.be.null;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Access Token exists\", function () {\r",
+              "    pm.expect(pm.collectionVariables.get(\"login_accessToken\")).to.not.be.null;\r",
+              "});\r",
+              "\r",
+              "// Console Logs\r",
+              "console.log(\"Base URL :\", pm.environment.get(\"Url_env\"));\r",
+              "console.log(\"User ID :\", pm.collectionVariables.get(\"user_id\"));\r",
+              "console.log(\"Access Token :\", pm.collectionVariables.get(\"login_accessToken\"));\r",
+              "\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "let jsonData = pm.response.json();\r",
+              "\r",
+              "// Status Code Validation\r",
+              "pm.test(\"Status Code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "// Response Time Validation\r",
+              "pm.test(\"Response Time less than 2000 ms\", function () {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+              "});\r",
+              "\r",
+              "// Header Validation\r",
+              "pm.test(\"Content-Type is application/json\", function () {\r",
+              "    pm.expect(pm.response.headers.get(\"Content-Type\"))\r",
+              "        .to.include(\"application/json\");\r",
+              "});\r",
+              "\r",
+              "// Orders Array Validation\r",
+              "pm.test(\"Orders array exists\", function () {\r",
+              "    pm.expect(jsonData.orders).to.be.an(\"array\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Orders array is not empty\", function () {\r",
+              "    pm.expect(jsonData.orders.length).to.be.greaterThan(0);\r",
+              "});\r",
+              "\r",
+              "// Pagination Validation\r",
+              "pm.test(\"Page is 1\", function () {\r",
+              "    pm.expect(jsonData.page).to.eql(1);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Limit is 20\", function () {\r",
+              "    pm.expect(jsonData.limit).to.eql(20);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Total Orders is greater than 0\", function () {\r",
+              "    pm.expect(jsonData.total).to.be.greaterThan(0);\r",
+              "});\r",
+              "\r",
+              "// First Order Validation\r",
+              "let firstOrder = jsonData.orders[0];\r",
+              "\r",
+              "pm.test(\"Order ID exists\", function () {\r",
+              "    pm.expect(firstOrder.id).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"User ID matches request user\", function () {\r",
+              "    pm.expect(firstOrder.userId)\r",
+              "        .to.eql(pm.collectionVariables.get(\"user_id\"));\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Customer Name exists\", function () {\r",
+              "    pm.expect(firstOrder.customerName).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Customer Email exists\", function () {\r",
+              "    pm.expect(firstOrder.customerEmail).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "// ==============================\r",
+              "// Data Type Validation\r",
+              "// ==============================\r",
+              "pm.test(\"Order ID is String\", function () {\r",
+              "    pm.expect(firstOrder.id).to.be.a(\"string\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"User ID is String\", function () {\r",
+              "    pm.expect(firstOrder.userId).to.be.a(\"string\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Customer Name is String\", function () {\r",
+              "    pm.expect(firstOrder.customerName).to.be.a(\"string\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Customer Email is String\", function () {\r",
+              "    pm.expect(firstOrder.customerEmail).to.be.a(\"string\");\r",
+              "});\r",
+              "\r",
+              "// Order Details Validation\r",
+              "pm.test(\"Order Status is pending\", function () {\r",
+              "    pm.expect(firstOrder.status).to.eql(\"pending\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Order Total is greater than 0\", function () {\r",
+              "    pm.expect(firstOrder.total).to.be.above(0);\r",
+              "});\r",
+              "\r",
+              "// Item Validation\r",
+              "pm.test(\"Items array exists\", function () {\r",
+              "    pm.expect(firstOrder.items).to.be.an(\"array\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Items count is greater than 0\", function () {\r",
+              "    pm.expect(firstOrder.items.length).to.be.greaterThan(0);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Item Name is Widget\", function () {\r",
+              "    pm.expect(firstOrder.items[0].name).to.eql(\"Widget\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Item Quantity is 3\", function () {\r",
+              "    pm.expect(firstOrder.items[0].quantity).to.eql(3);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Item Price is 19.99\", function () {\r",
+              "    pm.expect(firstOrder.items[0].price).to.eql(19.99);\r",
+              "});\r",
+              "\r",
+              "// Shipping Address Validation\r",
+              "pm.test(\"City is Mumbai\", function () {\r",
+              "    pm.expect(firstOrder.shippingAddress.city)\r",
+              "        .to.eql(\"Mumbai\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Country is IN\", function () {\r",
+              "    pm.expect(firstOrder.shippingAddress.country)\r",
+              "        .to.eql(\"IN\");\r",
+              "});\r",
+              "\r",
+              "// Date Validation\r",
+              "pm.test(\"CreatedAt exists\", function () {\r",
+              "    pm.expect(firstOrder.createdAt).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"UpdatedAt exists\", function () {\r",
+              "    pm.expect(firstOrder.updatedAt).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "// Store Variables for Chaining\r",
+              "pm.collectionVariables.set(\"order_id\", firstOrder.id);\r",
+              "pm.collectionVariables.set(\"order_status\", firstOrder.status);\r",
+              "pm.collectionVariables.set(\"order_total\", firstOrder.total);\r",
+              "\r",
+              "// Console Logs\r",
+              "console.log(\"Total Orders :\", jsonData.total);\r",
+              "console.log(\"Order ID :\", firstOrder.id);\r",
+              "console.log(\"Order Status :\", firstOrder.status);\r",
+              "console.log(\"Order Total :\", firstOrder.total);\r",
+              "console.log(\"Customer Name :\", firstOrder.customerName);\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{login_accessToken}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "{{Url_env}}/api/users/{{user_id}}/orders",
+          "host": [
+            "{{Url_env}}"
+          ],
+          "path": [
+            "api",
+            "users",
+            "{{user_id}}",
+            "orders"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GetOrderByid",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "// Validate Required Variables\r",
+              "\r",
+              "pm.test(\"Base URL exists\", function () {\r",
+              "    pm.expect(pm.environment.get(\"Url_env\")).to.not.be.null;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Order ID exists\", function () {\r",
+              "    pm.expect(pm.collectionVariables.get(\"order_id\")).to.not.be.null;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Access Token exists\", function () {\r",
+              "    pm.expect(pm.collectionVariables.get(\"login_accessToken\")).to.not.be.null;\r",
+              "});\r",
+              "\r",
+              "// Console Logs\r",
+              "console.log(\"Base URL :\", pm.environment.get(\"Url_env\"));\r",
+              "console.log(\"Order ID :\", pm.collectionVariables.get(\"order_id\"));\r",
+              "console.log(\"Access Token :\", pm.collectionVariables.get(\"login_accessToken\"));\r",
+              "\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "let jsonData = pm.response.json();\r",
+              "\r",
+              "// Status Code Validation\r",
+              "\r",
+              "pm.test(\"Status Code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "\r",
+              "// Response Time Validation\r",
+              "\r",
+              "pm.test(\"Response Time less than 2000 ms\", function () {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+              "});\r",
+              "\r",
+              "// Header Validation\r",
+              "\r",
+              "pm.test(\"Content-Type is application/json\", function () {\r",
+              "    pm.expect(pm.response.headers.get(\"Content-Type\"))\r",
+              "        .to.include(\"application/json\");\r",
+              "});\r",
+              "\r",
+              "// Order Object Validation\r",
+              "\r",
+              "pm.test(\"Order object exists\", function () {\r",
+              "    pm.expect(jsonData.order).to.not.be.null;\r",
+              "});\r",
+              "\r",
+              "// Field Presence Validation\r",
+              "\r",
+              "pm.test(\"Order ID exists\", function () {\r",
+              "    pm.expect(jsonData.order.id).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"User ID exists\", function () {\r",
+              "    pm.expect(jsonData.order.userId).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Customer Name exists\", function () {\r",
+              "    pm.expect(jsonData.order.customerName).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Customer Email exists\", function () {\r",
+              "    pm.expect(jsonData.order.customerEmail).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "// Data Type Validation\r",
+              "pm.test(\"Order ID is String\", function () {\r",
+              "    pm.expect(jsonData.order.id).to.be.a(\"string\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"User ID is String\", function () {\r",
+              "    pm.expect(jsonData.order.userId).to.be.a(\"string\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Customer Name is String\", function () {\r",
+              "    pm.expect(jsonData.order.customerName).to.be.a(\"string\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Customer Email is String\", function () {\r",
+              "    pm.expect(jsonData.order.customerEmail).to.be.a(\"string\");\r",
+              "});\r",
+              "\r",
+              "// Business Validation\r",
+              "pm.test(\"Order Status is pending\", function () {\r",
+              "    pm.expect(jsonData.order.status).to.eql(\"pending\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Order Total is greater than 0\", function () {\r",
+              "    pm.expect(jsonData.order.total).to.be.above(0);\r",
+              "});\r",
+              "\r",
+              "\r",
+              "// Items Validation\r",
+              "\r",
+              "pm.test(\"Items array exists\", function () {\r",
+              "    pm.expect(jsonData.order.items).to.be.an(\"array\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Items count greater than 0\", function () {\r",
+              "    pm.expect(jsonData.order.items.length).to.be.greaterThan(0);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Item Name exists\", function () {\r",
+              "    pm.expect(jsonData.order.items[0].name).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Item Quantity greater than 0\", function () {\r",
+              "    pm.expect(jsonData.order.items[0].quantity).to.be.above(0);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Item Price greater than 0\", function () {\r",
+              "    pm.expect(jsonData.order.items[0].price).to.be.above(0);\r",
+              "});\r",
+              "\r",
+              "// Shipping Address Validation\r",
+              "pm.test(\"Shipping Address exists\", function () {\r",
+              "    pm.expect(jsonData.order.shippingAddress).to.not.be.null;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"City is present\", function () {\r",
+              "    pm.expect(jsonData.order.shippingAddress.city).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Country is present\", function () {\r",
+              "    pm.expect(jsonData.order.shippingAddress.country).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "// Date Validation\r",
+              "pm.test(\"CreatedAt exists\", function () {\r",
+              "    pm.expect(jsonData.order.createdAt).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"UpdatedAt exists\", function () {\r",
+              "    pm.expect(jsonData.order.updatedAt).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "// Store Variables for Chaining\r",
+              "pm.collectionVariables.set(\"order_id\", jsonData.order.id);\r",
+              "pm.collectionVariables.set(\"order_status\", jsonData.order.status);\r",
+              "pm.collectionVariables.set(\"order_total\", jsonData.order.total);\r",
+              "\r",
+              "// Console Logs\r",
+              "console.log(\"Order ID :\", jsonData.order.id);\r",
+              "console.log(\"User ID :\", jsonData.order.userId);\r",
+              "console.log(\"Order Status :\", jsonData.order.status);\r",
+              "console.log(\"Order Total :\", jsonData.order.total);\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{login_accessToken}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{Url_env}}/api/orders/{{user_id}}",
+          "host": [
+            "{{Url_env}}"
+          ],
+          "path": [
+            "api",
+            "orders",
+            "{{user_id}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update order by id",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "// Generate Random Number\r",
+              "let randomNum = Math.floor(Math.random() * 100000);\r",
+              "\r",
+              "// Generate Random Customer Name\r",
+              "let randomCustomerName = \"Darshan_\" + randomNum;\r",
+              "\r",
+              "// Generate Random Customer Email\r",
+              "let randomCustomerEmail = \"darshan\" + randomNum + \"@gmail.com\";\r",
+              "\r",
+              "// Generate Random Quantity (1 to 10)\r",
+              "let randomQuantity = Math.floor(Math.random() * 10) + 1;\r",
+              "\r",
+              "// Calculate Total Price\r",
+              "let itemPrice = 19.99;\r",
+              "let totalPrice = randomQuantity * itemPrice;\r",
+              "\r",
+              "// Store Variables\r",
+              "pm.collectionVariables.set(\"randomCustomerName\", randomCustomerName);\r",
+              "pm.collectionVariables.set(\"randomCustomerEmail\", randomCustomerEmail);\r",
+              "pm.collectionVariables.set(\"randomQuantity\", randomQuantity);\r",
+              "pm.collectionVariables.set(\"expectedTotal\", totalPrice.toFixed(2));\r",
+              "\r",
+              "// Console Logs\r",
+              "console.log(\"Customer Name :\", randomCustomerName);\r",
+              "console.log(\"Customer Email :\", randomCustomerEmail);\r",
+              "console.log(\"Quantity :\", randomQuantity);\r",
+              "console.log(\"Expected Total :\", totalPrice);\r",
+              "\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "let jsonData = pm.response.json();\r",
+              "\r",
+              "// Status Code Validation\r",
+              "pm.test(\"Status Code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "// Response Time Validation\r",
+              "pm.test(\"Response Time < 2000 ms\", function () {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+              "});\r",
+              "\r",
+              "// Header Validation\r",
+              "pm.test(\"Content-Type is application/json\", function () {\r",
+              "    pm.expect(pm.response.headers.get(\"Content-Type\"))\r",
+              "        .to.include(\"application/json\");\r",
+              "});\r",
+              "\r",
+              "// Customer Name Validation\r",
+              "pm.test(\"Customer Name Updated Successfully\", function () {\r",
+              "    pm.expect(jsonData.customerName)\r",
+              "        .to.eql(pm.collectionVariables.get(\"randomCustomerName\"));\r",
+              "});\r",
+              "\r",
+              "// ==============================\r",
+              "// Customer Email Validation\r",
+              "// ==============================\r",
+              "pm.test(\"Customer Email Updated Successfully\", function () {\r",
+              "    pm.expect(jsonData.customerEmail)\r",
+              "        .to.eql(pm.collectionVariables.get(\"randomCustomerEmail\"));\r",
+              "});\r",
+              "\r",
+              "// User ID Validation\r",
+              "pm.test(\"User ID Validation\", function () {\r",
+              "    pm.expect(jsonData.userId)\r",
+              "        .to.eql(pm.collectionVariables.get(\"user_id\"));\r",
+              "});\r",
+              "\r",
+              "// Items Validation\r",
+              "pm.test(\"Items Array Exists\", function () {\r",
+              "    pm.expect(jsonData.items).to.be.an(\"array\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Item Name Validation\", function () {\r",
+              "    pm.expect(jsonData.items[0].name)\r",
+              "        .to.eql(\"Widget\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Item Quantity Validation\", function () {\r",
+              "    pm.expect(jsonData.items[0].quantity)\r",
+              "        .to.eql(\"{{randomQuantity}}\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Item Price Validation\", function () {\r",
+              "    pm.expect(jsonData.items[0].price)\r",
+              "        .to.eql(19.99);\r",
+              "});\r",
+              "\r",
+              "// Shipping Address Validation\r",
+              "pm.test(\"City Validation\", function () {\r",
+              "    pm.expect(jsonData.shippingAddress.city)\r",
+              "        .to.eql(\"Mumbai\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Country Validation\", function () {\r",
+              "    pm.expect(jsonData.shippingAddress.country)\r",
+              "        .to.eql(\"IN\");\r",
+              "});\r",
+              "\r",
+              "// Notes Validation\r",
+              "pm.test(\"Notes Validation\", function () {\r",
+              "    pm.expect(jsonData.notes)\r",
+              "        .to.eql(\"Leave at door\");\r",
+              "});\r",
+              "\r",
+              "// Save Updated Values\r",
+              "pm.collectionVariables.set(\"updated_customerName\",jsonData.customerName);\r",
+              "\r",
+              "pm.collectionVariables.set(\"updated_customerEmail\",jsonData.customerEmail);\r",
+              "\r",
+              "// Console Logs\r",
+              "console.log(\"Updated Customer Name :\", jsonData.customerName);\r",
+              "console.log(\"Updated Customer Email :\", jsonData.customerEmail);\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{login_accessToken}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"customerName\": \"{{randomCustomerName}}\",\r\n  \"customerEmail\": \"{{randomCustomerEmail}}\",\r\n  \"userId\": \"{{user_id}}\",\r\n  \"items\": [\r\n    {\r\n      \"name\": \"Widget\",\r\n      \"quantity\": {{randomQuantity}},\r\n      \"price\": 19.99\r\n    }\r\n  ],\r\n  \"shippingAddress\": {\r\n    \"street\": \"123 Main St\",\r\n    \"city\": \"Mumbai\",\r\n    \"state\": \"MH\",\r\n    \"zip\": \"400001\",\r\n    \"country\": \"IN\"\r\n  },\r\n  \"notes\": \"Leave at door\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{Url_env}}/api/orders/{{order_id}}",
+          "host": [
+            "{{Url_env}}"
+          ],
+          "path": [
+            "api",
+            "orders",
+            "{{order_id}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update order status",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "// Validate Required Variables\r",
+              "pm.test(\"Order ID exists\", function () {\r",
+              "    pm.expect(pm.collectionVariables.get(\"order_id\")).to.not.be.null;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Access Token exists\", function () {\r",
+              "    pm.expect(pm.collectionVariables.get(\"login_accessToken\")).to.not.be.null;\r",
+              "});\r",
+              "\r",
+              "// Store Expected Status\r",
+              "pm.collectionVariables.set(\"expectedStatus\", \"confirmed\");\r",
+              "\r",
+              "// Console Logs\r",
+              "console.log(\"Order ID :\", pm.collectionVariables.get(\"order_id\"));\r",
+              "console.log(\"Access Token :\", pm.collectionVariables.get(\"login_accessToken\"));\r",
+              "console.log(\"Expected Status :\", pm.collectionVariables.get(\"expectedStatus\"));"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "let jsonData = pm.response.json();\r",
+              "\r",
+              "// Status Code Validation\r",
+              "pm.test(\"Status Code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "// Response Time Validation\r",
+              "pm.test(\"Response Time less than 2000 ms\", function () {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+              "});\r",
+              "\r",
+              "// Header Validation\r",
+              "pm.test(\"Content-Type is application/json\", function () {\r",
+              "    pm.expect(pm.response.headers.get(\"Content-Type\"))\r",
+              "        .to.include(\"application/json\");\r",
+              "});\r",
+              "\r",
+              "// Order Object Validation\r",
+              "pm.test(\"Order object exists\", function () {\r",
+              "    pm.expect(jsonData.order).to.not.be.null;\r",
+              "});\r",
+              "\r",
+              "// Field Presence Validation\r",
+              "pm.test(\"Order ID exists\", function () {\r",
+              "    pm.expect(jsonData.order.id).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"User ID exists\", function () {\r",
+              "    pm.expect(jsonData.order.userId).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Customer Name exists\", function () {\r",
+              "    pm.expect(jsonData.order.customerName).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Customer Email exists\", function () {\r",
+              "    pm.expect(jsonData.order.customerEmail).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "// Status Validation\r",
+              "pm.test(\"Order Status Updated Successfully\", function () {\r",
+              "    pm.expect(jsonData.order.status)\r",
+              "        .to.eql(pm.collectionVariables.get(\"expectedStatus\"));\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Status is Confirmed\", function () {\r",
+              "    pm.expect(jsonData.order.status)\r",
+              "        .to.eql(\"confirmed\");\r",
+              "});\r",
+              "\r",
+              "// Total Validation\r",
+              "pm.test(\"Order Total is greater than 0\", function () {\r",
+              "    pm.expect(jsonData.order.total).to.be.above(0);\r",
+              "});\r",
+              "\r",
+              "// Items Validation\r",
+              "pm.test(\"Items array exists\", function () {\r",
+              "    pm.expect(jsonData.order.items).to.be.an(\"array\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Items array is not empty\", function () {\r",
+              "    pm.expect(jsonData.order.items.length).to.be.greaterThan(0);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Item Name is Widget\", function () {\r",
+              "    pm.expect(jsonData.order.items[0].name).to.eql(\"Widget\");\r",
+              "});\r",
+              "\r",
+              "// Shipping Address Validation\r",
+              "pm.test(\"Shipping Address exists\", function () {\r",
+              "    pm.expect(jsonData.order.shippingAddress).to.not.be.null;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"City is Mumbai\", function () {\r",
+              "    pm.expect(jsonData.order.shippingAddress.city)\r",
+              "        .to.eql(\"Mumbai\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Country is IN\", function () {\r",
+              "    pm.expect(jsonData.order.shippingAddress.country)\r",
+              "        .to.eql(\"IN\");\r",
+              "});\r",
+              "\r",
+              "// Date Validation\r",
+              "pm.test(\"CreatedAt exists\", function () {\r",
+              "    pm.expect(jsonData.order.createdAt).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"UpdatedAt exists\", function () {\r",
+              "    pm.expect(jsonData.order.updatedAt).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "// Store Updated Status\r",
+              "pm.collectionVariables.set(\r",
+              "    \"order_status\",\r",
+              "    jsonData.order.status\r",
+              ");\r",
+              "\r",
+              "// Console Logs\r",
+              "console.log(\"Order ID :\", jsonData.order.id);\r",
+              "console.log(\"Updated Status :\", jsonData.order.status);\r",
+              "console.log(\"Updated At :\", jsonData.order.updatedAt);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "apikey",
+          "apikey": [
+            {
+              "key": "value",
+              "value": "qwertyuioasdfghjk34567dfghj",
+              "type": "string"
+            },
+            {
+              "key": "key",
+              "value": "x-api-key",
+              "type": "string"
+            },
+            {
+              "key": "in",
+              "value": "header",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{login_accessToken}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"status\":\"confirmed\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{Url_env}}/api/orders/{{order_id}}/status",
+          "host": [
+            "{{Url_env}}"
+          ],
+          "path": [
+            "api",
+            "orders",
+            "{{order_id}}",
+            "status"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Cancel order",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "// Validate Required Variables\r",
+              "\r",
+              "pm.test(\"Order ID exists\", function () {\r",
+              "    pm.expect(pm.collectionVariables.get(\"order_id\")).to.not.be.null;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Access Token exists\", function () {\r",
+              "    pm.expect(pm.collectionVariables.get(\"login_accessToken\")).to.not.be.null;\r",
+              "});\r",
+              "\r",
+              "// Store Expected Values\r",
+              "pm.collectionVariables.set(\"expectedStatus\", \"cancelled\");\r",
+              "pm.collectionVariables.set(\"expectedMessage\", \"order cancelled\");\r",
+              "\r",
+              "// Console Logs\r",
+              "console.log(\"Order ID :\", pm.collectionVariables.get(\"order_id\"));\r",
+              "console.log(\"Access Token :\", pm.collectionVariables.get(\"login_accessToken\"));\r",
+              "console.log(\"Expected Status :\", pm.collectionVariables.get(\"expectedStatus\"));"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "let jsonData = pm.response.json();\r",
+              "\r",
+              "// Status Code Validation\r",
+              "pm.test(\"Status Code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "// Response Time Validation\r",
+              "pm.test(\"Response Time less than 2000 ms\", function () {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+              "});\r",
+              "\r",
+              "// Header Validation\r",
+              "pm.test(\"Content-Type is application/json\", function () {\r",
+              "    pm.expect(pm.response.headers.get(\"Content-Type\"))\r",
+              "        .to.include(\"application/json\");\r",
+              "});\r",
+              "\r",
+              "// Order Object Validation\r",
+              "pm.test(\"Order object exists\", function () {\r",
+              "    pm.expect(jsonData.order).to.not.be.null;\r",
+              "});\r",
+              "\r",
+              "// Field Presence Validation\r",
+              "pm.test(\"Order ID exists\", function () {\r",
+              "    pm.expect(jsonData.order.id).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"User ID exists\", function () {\r",
+              "    pm.expect(jsonData.order.userId).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Customer Name exists\", function () {\r",
+              "    pm.expect(jsonData.order.customerName).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Customer Email exists\", function () {\r",
+              "    pm.expect(jsonData.order.customerEmail).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "// Cancel Status Validation\r",
+              "pm.test(\"Order Status is Cancelled\", function () {\r",
+              "    pm.expect(jsonData.order.status)\r",
+              "        .to.eql(\"cancelled\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Order Status matches expected value\", function () {\r",
+              "    pm.expect(jsonData.order.status)\r",
+              "        .to.eql(pm.collectionVariables.get(\"expectedStatus\"));\r",
+              "});\r",
+              "\r",
+              "// Success Message Validation\r",
+              "pm.test(\"Order Cancelled Message Validation\", function () {\r",
+              "    pm.expect(jsonData.message)\r",
+              "        .to.eql(\"order cancelled\");\r",
+              "});\r",
+              "\r",
+              "// Total Validation\r",
+              "pm.test(\"Order Total greater than 0\", function () {\r",
+              "    pm.expect(jsonData.order.total).to.be.above(0);\r",
+              "});\r",
+              "\r",
+              "// Items Validation\r",
+              "pm.test(\"Items array exists\", function () {\r",
+              "    pm.expect(jsonData.order.items).to.be.an(\"array\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Items array is not empty\", function () {\r",
+              "    pm.expect(jsonData.order.items.length).to.be.greaterThan(0);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Item Name is Widget\", function () {\r",
+              "    pm.expect(jsonData.order.items[0].name)\r",
+              "        .to.eql(\"Widget\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Item Quantity greater than 0\", function () {\r",
+              "    pm.expect(jsonData.order.items[0].quantity)\r",
+              "        .to.be.above(0);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Item Price greater than 0\", function () {\r",
+              "    pm.expect(jsonData.order.items[0].price)\r",
+              "        .to.be.above(0);\r",
+              "});\r",
+              "\r",
+              "// Shipping Address Validation\r",
+              "pm.test(\"Shipping Address exists\", function () {\r",
+              "    pm.expect(jsonData.order.shippingAddress).to.not.be.null;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"City is Mumbai\", function () {\r",
+              "    pm.expect(jsonData.order.shippingAddress.city)\r",
+              "        .to.eql(\"Mumbai\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Country is IN\", function () {\r",
+              "    pm.expect(jsonData.order.shippingAddress.country)\r",
+              "        .to.eql(\"IN\");\r",
+              "});\r",
+              "\r",
+              "// Date Validation\r",
+              "pm.test(\"CreatedAt exists\", function () {\r",
+              "    pm.expect(jsonData.order.createdAt).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"UpdatedAt exists\", function () {\r",
+              "    pm.expect(jsonData.order.updatedAt).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"UpdatedAt is changed\", function () {\r",
+              "    pm.expect(jsonData.order.updatedAt)\r",
+              "        .to.not.eql(jsonData.order.createdAt);\r",
+              "});\r",
+              "\r",
+              "// Store Variables for Chaining\r",
+              "pm.collectionVariables.set(\"order_status\", jsonData.order.status);\r",
+              "\r",
+              "// Console Logs\r",
+              "console.log(\"Order ID :\", jsonData.order.id);\r",
+              "console.log(\"Order Status :\", jsonData.order.status);\r",
+              "console.log(\"Message :\", jsonData.message);\r",
+              "console.log(\"Updated At :\", jsonData.order.updatedAt);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "apikey",
+          "apikey": [
+            {
+              "key": "value",
+              "value": "qwertyuioasdfghjk34567dfghj",
+              "type": "string"
+            },
+            {
+              "key": "key",
+              "value": "x-api-key",
+              "type": "string"
+            },
+            {
+              "key": "in",
+              "value": "header",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{login_accessToken}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{Url_env}}/api/orders/{{order_id}}/cancel",
+          "host": [
+            "{{Url_env}}"
+          ],
+          "path": [
+            "api",
+            "orders",
+            "{{order_id}}",
+            "cancel"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Orders Copy",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "// Validate Required Variables\r",
+              "\r",
+              "pm.test(\"Access Token exists\", function () {\r",
+              "    pm.expect(pm.collectionVariables.get(\"login_accessToken\")).to.not.be.null;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"User ID exists\", function () {\r",
+              "    pm.expect(pm.collectionVariables.get(\"user_id\")).to.not.be.null;\r",
+              "});\r",
+              "\r",
+              "// Log Variables\r",
+              "console.log(\"Access Token:\", pm.collectionVariables.get(\"login_accessToken\"));\r",
+              "console.log(\"User ID:\", pm.collectionVariables.get(\"user_id\"));\r",
+              "\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "let jsonData = pm.response.json();\r",
+              "\r",
+              "// Store Variables for Chaining\r",
+              "pm.collectionVariables.set(\"order_id\", jsonData.order.id);\r",
+              "pm.collectionVariables.set(\"order_status\", jsonData.order.status);\r",
+              "pm.collectionVariables.set(\"order_total\", jsonData.order.total);\r",
+              "\r",
+              "// Status Code Validation\r",
+              "pm.test(\"Status Code is 201\", function () {\r",
+              "    pm.response.to.have.status(201);\r",
+              "});\r",
+              "\r",
+              "// Response Time Validation\r",
+              "pm.test(\"Response time is less than 2000ms\", function () {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+              "});\r",
+              "\r",
+              "// Header Validation\r",
+              "pm.test(\"Content-Type is application/json\", function () {\r",
+              "    pm.expect(pm.response.headers.get(\"Content-Type\"))\r",
+              "        .to.include(\"application/json\");\r",
+              "});\r",
+              "\r",
+              "// Order Object Validation\r",
+              "pm.test(\"Order object exists\", function () {\r",
+              "    pm.expect(jsonData.order).to.not.be.null;\r",
+              "});\r",
+              "\r",
+              "// Field Presence Validation\r",
+              "pm.test(\"Order ID is present\", function () {\r",
+              "    pm.expect(jsonData.order.id).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"User ID is present\", function () {\r",
+              "    pm.expect(jsonData.order.userId).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Customer Name is present\", function () {\r",
+              "    pm.expect(jsonData.order.customerName).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Customer Email is present\", function () {\r",
+              "    pm.expect(jsonData.order.customerEmail).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "// Data Type Validation\r",
+              "pm.test(\"Order ID is String\", function () {\r",
+              "    pm.expect(jsonData.order.id).to.be.a(\"string\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"User ID is String\", function () {\r",
+              "    pm.expect(jsonData.order.userId).to.be.a(\"string\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Customer Name is String\", function () {\r",
+              "    pm.expect(jsonData.order.customerName).to.be.a(\"string\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Customer Email is String\", function () {\r",
+              "    pm.expect(jsonData.order.customerEmail).to.be.a(\"string\");\r",
+              "});\r",
+              "\r",
+              "// Business Validation\r",
+              "\r",
+              "pm.test(\"Order Status is pending\", function () {\r",
+              "    pm.expect(jsonData.order.status).to.eql(\"pending\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Default Status is pending\", function () {\r",
+              "    pm.expect(jsonData.defaultStatus).to.eql(\"pending\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Order Created Successfully Message\", function () {\r",
+              "    pm.expect(jsonData.message)\r",
+              "        .to.eql(\"order created successfully\");\r",
+              "});\r",
+              "\r",
+              "// Customer Validation\r",
+              "\r",
+              "pm.test(\"Customer Name Validation\", function () {\r",
+              "    pm.expect(jsonData.order.customerName)\r",
+              "        .to.eql(\"{{username_env}}\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Customer Email Validation\", function () {\r",
+              "    pm.expect(jsonData.order.customerEmail)\r",
+              "        .to.eql(\"{{email_env}}\");\r",
+              "});\r",
+              "\r",
+              "// Item Validation\r",
+              "pm.test(\"Items array exists\", function () {\r",
+              "    pm.expect(jsonData.order.items).to.be.an(\"array\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Items count is 1\", function () {\r",
+              "    pm.expect(jsonData.order.items.length).to.eql(1);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Item name validation\", function () {\r",
+              "    pm.expect(jsonData.order.items[0].name)\r",
+              "        .to.eql(\"Widget\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Item quantity validation\", function () {\r",
+              "    pm.expect(jsonData.order.items[0].quantity)\r",
+              "        .to.eql(2);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Item price validation\", function () {\r",
+              "    pm.expect(jsonData.order.items[0].price)\r",
+              "        .to.eql(19.99);\r",
+              "});\r",
+              "\r",
+              "// Total Validation\r",
+              "pm.test(\"Order total is correct\", function () {\r",
+              "    pm.expect(jsonData.order.total)\r",
+              "        .to.eql(39.98);\r",
+              "});\r",
+              "\r",
+              "// Shipping Address Validation\r",
+              "pm.test(\"City is Mumbai\", function () {\r",
+              "    pm.expect(jsonData.order.shippingAddress.city)\r",
+              "        .to.eql(\"Mumbai\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Country is IN\", function () {\r",
+              "    pm.expect(jsonData.order.shippingAddress.country)\r",
+              "        .to.eql(\"IN\");\r",
+              "});\r",
+              "\r",
+              "// Date Validation\r",
+              "pm.test(\"CreatedAt exists\", function () {\r",
+              "    pm.expect(jsonData.order.createdAt).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"UpdatedAt exists\", function () {\r",
+              "    pm.expect(jsonData.order.updatedAt).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "// Console Logs\r",
+              "console.log(\"Order ID:\", jsonData.order.id);\r",
+              "console.log(\"Order Status:\", jsonData.order.status);\r",
+              "console.log(\"Order Total:\", jsonData.order.total);\r",
+              "console.log(\"Customer:\", jsonData.order.customerName);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{login_accessToken}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"customerName\": \"{{username_env}}\",\r\n  \"customerEmail\": \"{{email_env}}\",\r\n  \"userId\": \"{{user_id}}\",\r\n  \"items\": [\r\n    { \"name\": \"Widget\", \"quantity\": 3, \"price\": 19.99 }\r\n  ],\r\n  \"shippingAddress\": {\r\n    \"street\": \"123 Main St\",\r\n    \"city\": \"Mumbai\",\r\n    \"state\": \"MH\",\r\n    \"zip\": \"400001\",\r\n    \"country\": \"IN\"\r\n  },\r\n  \"notes\": \"Leave at door\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{Url_env}}/api/orders",
+          "host": [
+            "{{Url_env}}"
+          ],
+          "path": [
+            "api",
+            "orders"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete order by id",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "// Validate Required Variables\r",
+              "\r",
+              "pm.test(\"Order ID exists\", function () {\r",
+              "    pm.expect(pm.collectionVariables.get(\"order_id\")).to.not.be.null;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Access Token exists\", function () {\r",
+              "    pm.expect(pm.collectionVariables.get(\"login_accessToken\")).to.not.be.null;\r",
+              "});\r",
+              "\r",
+              "// Store Order ID Before Delete\r",
+              "pm.collectionVariables.set(\r",
+              "    \"deleted_order_id\",\r",
+              "    pm.collectionVariables.get(\"order_id\")\r",
+              ");\r",
+              "\r",
+              "// Console Logs\r",
+              "console.log(\"Order ID :\", pm.collectionVariables.get(\"order_id\"));\r",
+              "console.log(\"Access Token :\", pm.collectionVariables.get(\"login_accessToken\"));"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "let jsonData = pm.response.json();\r",
+              "\r",
+              "// Status Code Validation\r",
+              "pm.test(\"Status Code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "// Response Time Validation\r",
+              "pm.test(\"Response Time less than 2000 ms\", function () {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+              "});\r",
+              "\r",
+              "// Header Validation\r",
+              "pm.test(\"Content-Type is application/json\", function () {\r",
+              "    pm.expect(pm.response.headers.get(\"Content-Type\"))\r",
+              "        .to.include(\"application/json\");\r",
+              "});\r",
+              "\r",
+              "// Response Body Validation\r",
+              "pm.test(\"Response contains message field\", function () {\r",
+              "    pm.expect(jsonData.message).to.exist;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Delete Success Message Validation\", function () {\r",
+              "    pm.expect(jsonData.message)\r",
+              "        .to.eql(\"your order is deleted successfully\");\r",
+              "});\r",
+              "\r",
+              "// Data Type Validation\r",
+              "pm.test(\"Message is String\", function () {\r",
+              "    pm.expect(jsonData.message).to.be.a(\"string\");\r",
+              "});\r",
+              "\r",
+              "// Remove Collection Variables\r",
+              "pm.collectionVariables.unset(\"order_id\");\r",
+              "pm.collectionVariables.unset(\"order_status\");\r",
+              "pm.collectionVariables.unset(\"order_total\");\r",
+              "\r",
+              "// Console Logs\r",
+              "console.log(\"Order Deleted Successfully\");\r",
+              "console.log(\"Message :\", jsonData.message);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "apikey",
+          "apikey": [
+            {
+              "key": "value",
+              "value": "qwertyuioasdfghjk34567dfghj",
+              "type": "string"
+            },
+            {
+              "key": "key",
+              "value": "x-api-key",
+              "type": "string"
+            },
+            {
+              "key": "in",
+              "value": "header",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{login_accessToken}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{Url_env}}/api/orders/{{order_id}}",
+          "host": [
+            "{{Url_env}}"
+          ],
+          "path": [
+            "api",
+            "orders",
+            "{{order_id}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "ChangePassword",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "// Validate Required Variables\r",
+              "\r",
+              "pm.test(\"Access Token exists\", function () {\r",
+              "    pm.expect(pm.collectionVariables.get(\"login_accessToken\")).to.not.be.null;\r",
+              "});\r",
+              "\r",
+              "// Generate Random Password\r",
+              "\r",
+              "let randomNum = Math.floor(Math.random() * 100000);\r",
+              "let newPassword = \"Test@\" + randomNum; // Example: Test@54321\r",
+              "\r",
+              "// Save in Environment Variable\r",
+              "pm.environment.set(\"new_password\", newPassword);\r",
+              "\r",
+              "// Console Logs\r",
+              "console.log(\"Generated Password :\", newPassword);\r",
+              "\r",
+              "// Password Validation\r",
+              "\r",
+              "pm.test(\"Generated password length is >= 8\", function () {\r",
+              "    pm.expect(newPassword.length).to.be.at.least(8);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// Validate Required Variables\r",
+              "\r",
+              "pm.test(\"Access Token exists\", function () {\r",
+              "    pm.expect(pm.collectionVariables.get(\"login_accessToken\")).to.not.be.null;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Current Password exists\", function () {\r",
+              "    pm.expect(pm.environment.get(\"env_password\")).to.not.be.null;\r",
+              "});\r",
+              "\r",
+              "// Generate Strong Random Password\r",
+              "\r",
+              "let randomNum = Math.floor(Math.random() * 100000);\r",
+              "\r",
+              "let newPassword = \"Test@\" + randomNum + \"Aa\";\r",
+              "\r",
+              "pm.environment.set(\"new_password\", newPassword);\r",
+              "\r",
+              "// Password Validation\r",
+              "pm.test(\"Generated password length is at least 8\", function () {\r",
+              "    pm.expect(newPassword.length).to.be.at.least(8);\r",
+              "});\r",
+              "\r",
+              "console.log(\"Generated Password :\", newPassword);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "apikey",
+          "apikey": [
+            {
+              "key": "value",
+              "value": "qwertyuioasdfghjk34567dfghj",
+              "type": "string"
+            },
+            {
+              "key": "key",
+              "value": "x-api-key",
+              "type": "string"
+            },
+            {
+              "key": "in",
+              "value": "header",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{login_accessToken}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"currentPassword\":\"{{user_password}}\",\r\n    \"newPassword\":\"{{NewUser_password}}\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{Url_env}}/api/auth/change-password",
+          "host": [
+            "{{Url_env}}"
+          ],
+          "path": [
+            "api",
+            "auth",
+            "change-password"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Logout",
+      "request": {
+        "auth": {
+          "type": "apikey",
+          "apikey": [
+            {
+              "key": "value",
+              "value": "qwertyuioasdfghjk34567dfghj",
+              "type": "string"
+            },
+            {
+              "key": "key",
+              "value": "x-api-key",
+              "type": "string"
+            },
+            {
+              "key": "in",
+              "value": "header",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{login_accessToken}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{Url_env}}/api/logout",
+          "host": [
+            "{{Url_env}}"
+          ],
+          "path": [
+            "api",
+            "logout"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete User",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "let jsonData = pm.response.json();\r",
+              "\r",
+              "// Status Code Validation\r",
+              "pm.test(\"Status Code is 204 or 200\", function () {\r",
+              "    pm.expect(pm.response.code).to.be.oneOf([200, 204]);\r",
+              "});\r",
+              "\r",
+              "// Response Time Validation\r",
+              "pm.test(\"Response time is less than 2000 ms\", function () {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+              "});\r",
+              "\r",
+              "// Content-Type Validation\r",
+              "pm.test(\"Content-Type is application/json\", function () {\r",
+              "    pm.expect(pm.response.headers.get(\"Content-Type\"))\r",
+              "      .to.include(\"application/json\");\r",
+              "});\r",
+              "\r",
+              "// Success Message Validation\r",
+              "if(jsonData.message){\r",
+              "    pm.test(\"Delete user success message\", function () {\r",
+              "        pm.expect(jsonData.message.toLowerCase())\r",
+              "          .to.include(\"delete\");\r",
+              "    });\r",
+              "}\r",
+              "\r",
+              "// Clear Variables After Delete\r",
+              "pm.collectionVariables.unset(\"user_id\");\r",
+              "pm.collectionVariables.unset(\"user_name\");\r",
+              "pm.collectionVariables.unset(\"user_email\");\r",
+              "\r",
+              "console.log(\"User deleted successfully\");\r",
+              "\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "\r",
+              "// Verify Collection Variables\r",
+              "\r",
+              "pm.test(\"User ID variable exists\", function () {\r",
+              "    pm.expect(pm.collectionVariables.get(\"user_id\")).to.not.be.null;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Access Token variable exists\", function () {\r",
+              "    pm.expect(pm.collectionVariables.get(\"accessToken\")).to.not.be.null;\r",
+              "});\r",
+              "\r",
+              "// Print values in console\r",
+              "console.log(\"User ID :\", pm.collectionVariables.get(\"user_id\"));\r",
+              "console.log(\"Access Token :\", pm.collectionVariables.get(\"accessToken\"));"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "apikey",
+          "apikey": [
+            {
+              "key": "value",
+              "value": "qwertyuioasdfghjk34567dfghj",
+              "type": "string"
+            },
+            {
+              "key": "key",
+              "value": "x-api-key",
+              "type": "string"
+            },
+            {
+              "key": "in",
+              "value": "header",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{login_accessToken}}",
+            "type": "text"
+          },
+          {
+            "key": "x-api-key",
+            "value": "qwertyuioasdfghjk34567dfghj",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "http://localhost:3000/api/users/{{user_id}}",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "users",
+            "{{user_id}}"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "value",
+        "value": "qwertyuioasdfghjk34567dfghj",
+        "type": "string"
+      },
+      {
+        "key": "key",
+        "value": "x-api-key",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          "console.log(\"pre-request at folder level.\");"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "accessToken",
+      "value": ""
+    },
+    {
+      "key": "refreshToken",
+      "value": ""
+    },
+    {
+      "key": "tokenType",
+      "value": ""
+    },
+    {
+      "key": "login_user_email",
+      "value": ""
+    },
+    {
+      "key": "login_accessToken",
+      "value": ""
+    },
+    {
+      "key": "login_refreshToken",
+      "value": ""
+    },
+    {
+      "key": "login_tokenType",
+      "value": ""
+    },
+    {
+      "key": "randomCustomerName",
+      "value": ""
+    },
+    {
+      "key": "randomCustomerEmail",
+      "value": ""
+    },
+    {
+      "key": "updated_customerName",
+      "value": ""
+    },
+    {
+      "key": "updated_customerEmail",
+      "value": ""
+    },
+    {
+      "key": "randomQuantity",
+      "value": ""
+    },
+    {
+      "key": "expectedTotal",
+      "value": ""
+    },
+    {
+      "key": "expectedStatus",
+      "value": ""
+    },
+    {
+      "key": "expectedMessage",
+      "value": ""
+    },
+    {
+      "key": "deleted_order_id",
+      "value": ""
+    }
+  ]
+}

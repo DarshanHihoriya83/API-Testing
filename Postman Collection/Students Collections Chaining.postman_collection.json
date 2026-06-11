@@ -1,0 +1,173 @@
+{
+  "info": {
+    "_postman_id": "4a370aab-2a02-42a6-84ba-fbfb1e1ea966",
+    "name": "Students Collections Chaining",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "50131647"
+  },
+  "item": [
+    {
+      "name": "Create Student",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "//get response body as json object\r",
+              "// var jsonData = JSON.parse(responseBody);\r",
+              "// pm.environment.set(\"id\",jsonData.id);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"name\": \"Jay\",\r\n    \"location\": \"India\",\r\n    \"phone\": \"1234567890\",\r\n    \"courses\": [\r\n        \"Java\",\r\n        \"Selenium\"\r\n    ]\r\n}",
+          "options": {
+            "raw": {
+              "language": "html"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{QA}}",
+          "host": [
+            "{{QA}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Single Student Details",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "//\r",
+              "console.log(pm.globals.get(\"Userid_global\"));\r",
+              "console.log(pm.environment.get(\"dev_env\"));\r",
+              "console.log(pm.collectionVariables.get(\"url_colllection\"));\r",
+              "\r",
+              "\r",
+              "//global veraible\r",
+              "pm.globals.set(\"Userid_global\", \"2\");\r",
+              "\r",
+              "//environment variables\r",
+              "pm.environment.set(\"dev_env\",\"http://localhost:3000/students\")\r",
+              "\r",
+              "//collection variables\r",
+              "pm.collectionVariables.set(\"url_colllection\", \"http://localhost:3000/students\")\r",
+              "\r",
+              "\r",
+              "//deletion variables\r",
+              "// pm.collectionVariables.unset(\"url_colllection\")"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{QA}}/{{id}}",
+          "host": [
+            "{{QA}}"
+          ],
+          "path": [
+            "{{id}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Student",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{QA}}/{{id}}",
+          "host": [
+            "{{QA}}"
+          ],
+          "path": [
+            "{{id}}"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          "console.log(\"pre-request at folder level.\");"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "url_colllectio",
+      "value": ""
+    },
+    {
+      "key": "url_colllection",
+      "value": ""
+    }
+  ]
+}
